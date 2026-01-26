@@ -11,17 +11,17 @@ class Car(arcade.Sprite):
         self.scale = 0.5
         self.center_x = 1056
         self.center_y = 80
-        
+
         self.speed = 5  # Константная скорость движения
 
     def control(self, forward, brake, steer):
-        # В этой упрощенной модели мы игнорируем эти параметры 
+        # В этой упрощенной модели мы игнорируем эти параметры
         # и будем считывать нажатия напрямую в update или через Level1
         pass
 
     def update_with_keys(self, keys):
         """
-        Метод для прямого управления. 
+        Метод для прямого управления.
         Принимает set() нажатых клавиш из Level1.
         """
         self.change_x = 0
@@ -81,7 +81,7 @@ class Level1(arcade.View):
             steer = "right"
 
         self.car.control(forward, brake, steer)
-        .
+        self.car.update_with_keys(self.keys_pressed)
 
         self.engine.update()
         target = (self.car.center_x, self.car.center_y)

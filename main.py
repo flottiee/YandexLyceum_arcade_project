@@ -43,7 +43,8 @@ class Level1(arcade.View):
         self.world_camera.use()
         
         self.race_track.draw()
-        self.walls.draw()
+        # self.walls.draw()
+        # стены рисовать не нужно, они нужны только для коллизии
         self.objects.draw()
         self.car_list.draw()
 
