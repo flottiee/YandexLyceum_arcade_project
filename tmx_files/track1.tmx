@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="5" nextobjectid="1">
  <tileset firstgid="1" source="../tsx_files/objects.tsx"/>
  <tileset firstgid="41" source="../tsx_files/racing_track.tsx"/>
  <tileset firstgid="365" source="../tsx_files/objects_64.tsx"/>
@@ -16,6 +16,11 @@
  <layer id="3" name="walls" width="50" height="30">
   <data encoding="base64" compression="zlib">
    eJztmF0KwjAMx9PTiA/6Lh5BfHDvQwTvJOx2u4krGiylWdI2bTf1B8E5s5m/+ZIBvBiFtmRuEb4P771Ufwnz44jFXtMbgJNJuFgR9zeN1dFNtleMJZfRe5VymWynHEsOczqong7looOyPcDNmRQdoVzYczFzQpsUHdJzNfkGHYNzrK2DqucW+yNXB3dcgn8+6HO14Pb5WnS436+h464VVALac7dE/XM9oa2jZW39sg7qPq10pO7zEHO+NXtlzfmQ7A8LN08xr0vtj4MB2JjP55T1b7+l6kBcPS7+Mwb0O062DfiXRKIDwTi5ZyQHJz+196Cl5f+KXEJzC01aH9cGdeQjqSdKj43/bHi/GsTMGIzTj5/yq8XAu2RReo+Hev4J/H85aQ==
+  </data>
+ </layer>
+ <layer id="4" name="finish_line" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztz0ENACAMALGhCg1owL+PWeCxBMJaBXcRAAAAAEB3e9wuqLF8PGV+8nEqAbIaASk=
   </data>
  </layer>
 </map>
