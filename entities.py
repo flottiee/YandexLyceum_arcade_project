@@ -1,15 +1,33 @@
-# entities.py
+# # entities.py
 import math
 import arcade
 import constants
 
+
 class Car(arcade.Sprite):
-    def __init__(self):
+    def __init__(self, track):
         super().__init__()
-        self.texture = arcade.load_texture("images/car_black_1r.png")
+        self.texture = arcade.load_texture("images/car_black_1.png")
         self.scale = constants.PLAYER_SCALE
-        self.center_x = constants.PLAYER_START_X
-        self.center_y = constants.PLAYER_START_Y
+
+        if track == 1:
+            self.center_x = constants.PLAYER_START_X_TRACK_1
+            self.center_y = constants.PLAYER_START_Y_TRACK_1
+            self.angle = 90
+        elif track == 2:
+            self.center_x = constants.PLAYER_START_X_TRACK_2
+            self.center_y = constants.PLAYER_START_Y_TRACK_2
+            self.angle = 270
+
+        self.acceleration = 0.5
+        self.speed = 0
+        self.brake_deceleration = 0.8
+        self.natural_deceleration = 0.2
+        self.max_forward_speed = constants.PLAYER_SPEED
+        self.max_reverse_speed = -constants.PLAYER_SPEED * 0.5
+
+        self.turn_speed = 10
+        self.steering_direction = 0
 
         self.input_up = False
         self.input_down = False
@@ -24,33 +42,40 @@ class Car(arcade.Sprite):
         self.input_right = right
 
     def update_car(self):
-        # Нужно попробовать сделать поворот более плавным, т.е не жестко 45, 90, 180 и 360 градусов,
-        # а изменять угол поворота машины при нажатии на клавишу, как было в моем прошлом коде.
-        # Завтра после школы попробую сделать это.
-        self.change_x = 0
-        self.change_y = 0
+        self.steering_direction = 0
+        if self.input_right:
+            self.steering_direction = 1
+        elif self.input_left:
+            self.steering_direction = -1
+
+        if abs(self.speed) > 0.1:
+            turn_multiplier = 1.0 - min(abs(self.speed) / self.max_forward_speed, 0.7)
+            self.angle += self.steering_direction * self.turn_speed * turn_multiplier
 
         if self.input_up:
-            self.change_y = constants.PLAYER_SPEED
+            self.speed += self.acceleration
+            if self.speed > self.max_forward_speed:
+                self.speed = self.max_forward_speed
         elif self.input_down:
-            self.change_y = -constants.PLAYER_SPEED
+            if self.speed > 0:
+                self.speed -= self.brake_deceleration
+                if self.speed < 0:
+                    self.speed = 0
+            else:
+                self.speed -= self.acceleration * 0.7
+                if self.speed < self.max_reverse_speed:
+                    self.speed = self.max_reverse_speed
+        else:
+            if self.speed > 0:
+                self.speed -= self.natural_deceleration
+                if self.speed < 0:
+                    self.speed = 0
+            elif self.speed < 0:
+                self.speed += self.natural_deceleration
+                if self.speed > 0:
+                    self.speed = 0
 
-        if self.input_right:
-            self.change_x = constants.PLAYER_SPEED
-        elif self.input_left:
-            self.change_x = -constants.PLAYER_SPEED
+        angle_rad = math.radians(self.angle)
 
-        if self.change_x != 0 or self.change_y != 0:
-            rad = math.atan2(self.change_y, self.change_x)
-            print(rad) 
-            deg = math.degrees(rad)
-            if deg == 90:
-                print("вверх")
-            elif deg == -90:
-                print("вниз")
-            elif deg == 0:
-                print("вправо")
-            elif deg == 180 or deg == -180:
-                print("влево")
-            
-            self.angle = -deg 
+        self.change_x = self.speed * math.sin(angle_rad)
+        self.change_y = self.speed * math.cos(angle_rad)

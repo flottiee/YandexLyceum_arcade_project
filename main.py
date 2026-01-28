@@ -12,6 +12,7 @@ class Level1(arcade.View):
     world_camera: arcade.Camera2D
     race_track: arcade.SpriteList
     objects: arcade.SpriteList
+    finish_line: arcade.SpriteList
     def __init__(self):
         super().__init__()
         
@@ -20,14 +21,18 @@ class Level1(arcade.View):
         self.setup()
 
     def setup(self):
-        self.car = Car()
+        # Передаем в Car номер трассы
+        self.car = Car(2)
         self.car_list = arcade.SpriteList()
         self.car_list.append(self.car)
 
-        self.map = arcade.load_tilemap('tmx_files/track1.tmx', 0.5)
+        self.lap_complete = arcade.load_sound('sounds/lap_complete.mp3')
+
+        self.map = arcade.load_tilemap('tmx_files/track2.tmx', 0.5)
         
         self.race_track = self.map.sprite_lists.get('race_track', arcade.SpriteList())
         self.objects = self.map.sprite_lists.get('objects', arcade.SpriteList())
+        self.finish_line = self.map.sprite_lists.get('finish_line', arcade.SpriteList())
         
         self.walls = arcade.SpriteList(use_spatial_hash=True)
         if 'walls' in self.map.sprite_lists:
@@ -36,6 +41,8 @@ class Level1(arcade.View):
         self.engine = arcade.PhysicsEngineSimple(self.car, self.walls)
 
         self.world_camera = arcade.Camera2D()
+
+        self.is_on_finish_line = False
 
     def on_draw(self):
         self.clear()
@@ -61,6 +68,12 @@ class Level1(arcade.View):
  
         self.engine.update()
 
+        if arcade.check_for_collision_with_list(self.car, self.finish_line) and self.is_on_finish_line == False:
+            self.is_on_finish_line = True
+            self.lap_complete.play()
+        elif not arcade.check_for_collision_with_list(self.car, self.finish_line):
+            self.is_on_finish_line = False
+
         self.update_camera()
 
     def update_camera(self):
@@ -73,8 +86,8 @@ class Level1(arcade.View):
         new_y = cam_y + (target_y - cam_y) * lerp
         half_w = self.window.width / 2
         half_h = self.window.height / 2
-        world_w = 6400
-        world_h = 3840
+        world_w = 3200
+        world_h = 1920
         
         final_x = max(half_w, min(world_w - half_w, new_x))
         final_y = max(half_h, min(world_h - half_h, new_y))
