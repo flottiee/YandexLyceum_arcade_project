@@ -13,6 +13,7 @@ class Level1(arcade.View):
     race_track: arcade.SpriteList
     objects: arcade.SpriteList
     finish_line: arcade.SpriteList
+    obstacles: arcade.SpriteList
     def __init__(self):
         super().__init__()
         
@@ -22,17 +23,18 @@ class Level1(arcade.View):
 
     def setup(self):
         # Передаем в Car номер трассы
-        self.car = Car(2)
+        self.car = Car(1)
         self.car_list = arcade.SpriteList()
         self.car_list.append(self.car)
 
         self.lap_complete = arcade.load_sound('sounds/lap_complete.mp3')
 
-        self.map = arcade.load_tilemap('tmx_files/track2.tmx', 0.5)
+        self.map = arcade.load_tilemap('tmx_files/track1.tmx', 0.5)
         
         self.race_track = self.map.sprite_lists.get('race_track', arcade.SpriteList())
         self.objects = self.map.sprite_lists.get('objects', arcade.SpriteList())
         self.finish_line = self.map.sprite_lists.get('finish_line', arcade.SpriteList())
+        self.obstacles = self.map.sprite_lists.get('obstacles', arcade.SpriteList())
         
         self.walls = arcade.SpriteList(use_spatial_hash=True)
         if 'walls' in self.map.sprite_lists:
@@ -50,9 +52,8 @@ class Level1(arcade.View):
         self.world_camera.use()
         
         self.race_track.draw()
-        # self.walls.draw()
-        # стены рисовать не нужно, они нужны только для коллизии
         self.objects.draw()
+        self.obstacles.draw()
         self.car_list.draw()
 
     def on_update(self, dt):
@@ -62,10 +63,11 @@ class Level1(arcade.View):
         right = (arcade.key.RIGHT in self.pressed_keys or arcade.key.D in self.pressed_keys)
 
         self.car.update_input(up, down, left, right)
-        
-        self.car.update_car()
+        self.car.update_car(dt)
+        if arcade.check_for_collision_with_list(self.car, self.obstacles):
+            self.car.start_slide()
+        self.car.update_animation_car(dt)
 
- 
         self.engine.update()
 
         if arcade.check_for_collision_with_list(self.car, self.finish_line) and self.is_on_finish_line == False:

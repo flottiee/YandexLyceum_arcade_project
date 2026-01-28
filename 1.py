@@ -7,7 +7,7 @@ CAMERA_LERP = 0.12
 class Car(arcade.Sprite):
     def __init__(self):
         super().__init__()
-        self.texture = arcade.load_texture("images/car_black_1r.png")
+        self.texture = arcade.load_texture("images/black_car/car_black_1r.png")
         self.scale = 0.5
         self.center_x = 1056
         self.center_y = 80

@@ -8,6 +8,9 @@ SCREEN_TITLE = "Аркадные Гонки"
 CAMERA_LERP = 0.1  # Плавность камеры (меньше = плавнее)
 
 
+TEXTURE_CHANGE_DELAY = 0.1
+
+
 PLAYER_SPEED = 6.0
 PLAYER_SCALE = 0.5
 # TRACK 1
