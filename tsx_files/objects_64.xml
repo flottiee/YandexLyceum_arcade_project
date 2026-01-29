@@ -121,4 +121,7 @@
  <tile id="39">
   <image source="../assets/objects/light_white_2.png" width="98" height="235"/>
  </tile>
+ <tile id="40">
+  <image source="../assets/racing_track.png" width="448" height="256"/>
+ </tile>
 </tileset>

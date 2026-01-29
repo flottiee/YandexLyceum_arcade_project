@@ -1,7 +1,16 @@
 # main.py
 import arcade
 import constants
-from entities import Car
+from pathlib import Path
+import sys
+
+# Ensure project root is on sys.path so "entities" and "views" import reliably
+PROJECT_ROOT = Path(__file__).parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from entities.Car import Car
+from views.menu_view import MenuView
 
 class Level1(arcade.View):
     car: Car
@@ -21,14 +30,15 @@ class Level1(arcade.View):
         self.setup()
 
     def setup(self):
-        # Передаем в Car номер трассы
         self.car = Car(2)
         self.car_list = arcade.SpriteList()
         self.car_list.append(self.car)
 
-        self.lap_complete = arcade.load_sound('sounds/lap_complete.mp3')
+        # Use absolute path relative to project root
+        self.lap_complete = arcade.load_sound(str(PROJECT_ROOT / 'sounds' / 'lap_complete.mp3'))
 
-        self.map = arcade.load_tilemap('tmx_files/track2.tmx', 0.5)
+        # Use absolute path for tmx
+        self.map = arcade.load_tilemap(str(PROJECT_ROOT / 'tmx_files' / 'track2.tmx'), 0.5)
         
         self.race_track = self.map.sprite_lists.get('race_track', arcade.SpriteList())
         self.objects = self.map.sprite_lists.get('objects', arcade.SpriteList())
@@ -50,8 +60,6 @@ class Level1(arcade.View):
         self.world_camera.use()
         
         self.race_track.draw()
-        # self.walls.draw()
-        # стены рисовать не нужно, они нужны только для коллизии
         self.objects.draw()
         self.car_list.draw()
 
@@ -101,10 +109,11 @@ class Level1(arcade.View):
         if key in self.pressed_keys:
             self.pressed_keys.remove(key)
 
+
 def main():
     window = arcade.Window(constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT, constants.SCREEN_TITLE)
-    view = Level1()
-    window.show_view(view)
+    menu = MenuView()
+    window.show_view(menu)
     arcade.run()
 
 if __name__ == "__main__":
