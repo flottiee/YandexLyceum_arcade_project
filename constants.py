@@ -19,20 +19,26 @@ PLAYER_START_Y_TRACK_2 = 883
 
 MIN_ZOOM = 1.2   # На максимальной скорости (отдаление)
 MAX_ZOOM = 2   # В покое (приближение)
-ZOOM_LERP = 0.02 # Плавность изменения зума (меньше = медленнее)
+ZOOM_LERP = 0.01 # Плавность изменения зума (меньше = медленнее)
 
 
 LEVELS = [
     {
         "map_path": "tmx_files/track1.tmx",
-        "track_id": 1,
-        "world_width": 3200,
-        "world_height": 1920
+        # СЮДА НУЖНО ДОБАВИТЬ track_id
+        "track_id": 1, 
+        "start_x": 1056,
+        "start_y": 80,
+        "start_angle": 90,
+        "finish_dir": (1, 0)
     },
     {
         "map_path": "tmx_files/track2.tmx",
         "track_id": 2,
+        "start_x": 482, "start_y": 883, "start_angle": 90,
+        "finish_dir": (1, 0), # Вектор направления через финиш (направо)
         "world_width": 3200,
         "world_height": 1920
     }
 ]
+
