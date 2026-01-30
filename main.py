@@ -11,6 +11,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from entities.Car import Car
 from views.menu_view import MenuView
+'''
 
 class Level1(arcade.View):
     car: Car
@@ -107,7 +108,7 @@ class Level1(arcade.View):
 
     def on_key_release(self, key, modifiers):
         if key in self.pressed_keys:
-            self.pressed_keys.remove(key)
+            self.pressed_keys.remove(key)'''
 
 
 def main():

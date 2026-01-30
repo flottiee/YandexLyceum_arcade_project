@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="7" nextobjectid="3">
- <tileset firstgid="1" source="../tsx_files/objects.xml"/>
- <tileset firstgid="41" source="../tsx_files/racing_track.xml"/>
- <tileset firstgid="365" source="../tsx_files/objects_64.xml"/>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="3">
+ <tileset firstgid="1" source="../tsx_files/objects.tsx"/>
+ <tileset firstgid="41" source="../tsx_files/racing_track.tsx"/>
+ <tileset firstgid="365" source="../tsx_files/objects_64.tsx"/>
  <layer id="1" name="race_track" width="50" height="30">
   <data encoding="base64" compression="zlib">
    eJztl0tOAzEMhp3L8FjQLQIWsEW8u0VQUbhBKTfgcQMel+IKhStwATwSljyR42TSOFONsPQt6ngi/05jzwAMxz6QF+Q7wgNy11OOKfaOfCVy+/fMxAGcuLh2K6Sa/nTQMULGyEGHZ6ygmko6npEFY87W9pEt5EKJt4bn86no4Gt+3aWzGEFdC+WqrfG6S2dBvtQ+UYL7DB2SX/LF+sSas7kf08I6yCfdlXnAvywz5MZIh3/OtCb5LexfR9s3FB1PIPcXyW89z3N0vDFfTbR5nqPjFXmE1Z3nqTpqWs4876qjxjuw5TxvbMz8tciZ59RzQvXg710N1u/BufNcQotdpbsT66fTwB78/Pr6HuQ6tH7qn+t5RHPt+dHUcQ97zqaDqE1Y3Bm0e3sNtH5FbLiwHuqv164dt4Osu/7moHYPeJ48/y66S5o2v/x7sBvIU8pfiit5ny+9/bQ56Bv9PyQ9xDGuXSXEpXIa+H2o7J3a2yU9lP+R0+OWzZ/QdPjzPFWPn38obgHl2A7sJ83zIdgvF3scaA==
+  </data>
+ </layer>
+ <layer id="7" name="obstacles" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1kkRAAAIAzHwjXhkcEyiYF+dRgDAXpXTBQDAF34FwE32m0sauHgBeA==
   </data>
  </layer>
  <layer id="2" name="objects" width="50" height="30">

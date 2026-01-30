@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="1">
- <tileset firstgid="1" source="../tsx_files/racing_track.xml"/>
- <tileset firstgid="325" source="../tsx_files/objects_64.xml"/>
+ <tileset firstgid="1" source="../tsx_files/racing_track.tsx"/>
+ <tileset firstgid="325" source="../tsx_files/objects_64.tsx"/>
  <layer id="1" name="race_track" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztVckNwjAQXCNxNxAJ+OYHlADURA8cHXB0AKECrhaogRoogI0iCxNsY4izOeSVRiQWSmbiGQ9AeeaKOCAqrFjYIueloOOCqDE9pqC/zwoLQYdXQP4cD4WOAO+rLN/YwHcd4npeR8VXXN9DOhm0eZasQa7jDPZ9G8+gyVnyD+bCO06IHdB511YGV/icWVKTKsbEu2llkMK7FBmk8C5FBim8S51B1x+uP1x/uP5w/eH6w/XHO3q41s6A7wQxlPAx6Y8GRIj7sAV0ejj/sYRHnJ+qP0LvxTPSBRo9Mv4D+MwG56frD0+SkQ6iCenpUfEfIfoG/GSj+x/XE36TOrz0JO0Bzj98ZqDg/6uOO0R7dsRfn0Xg17Kc2YZ4zvgSHiG3m4EO3fD9sNEBOuj2o+zzBI+PcKY=
+   eJztldkNwjAQRDdI3A0EARUgoAIE1EQPHB1wdMDRAUcv1EABbIQsjGUndmxvAHml9xGLJDNiJwPwP3NDTkgpMmeU8z4X7PDdK87HFalE6cxAft3TuNcnS85HnEM/o2gfD4WPI16XI31ahr93wRayffDn3zoqvfz5Afxk0OZbIrIBuY8LuN9bMYM635I8LLh3nJE90O2uaQZVrPE5c9slVYzO7vrKIMXuUmSQYncpMkixu9QZDP0R+iP0R+iP0B+hP0J/fNLFs2YBeqfIUKJHpz9q8ELcwwbQ+WH6JxIduv2R7J6YkQ7Q+MnSP4D0DPITSzLSRurgz4+O/jHSN3imzAcb5if5z6rw9mPbAy718z6yeorPmQ9s9LO5g5tvfF5s9f/6PAGbiWmr
   </data>
  </layer>
  <layer id="4" name="finish_line" width="50" height="30">
@@ -14,7 +14,7 @@
  </layer>
  <layer id="2" name="objects" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztmM0KgzAMgJu3E/dz2Ng877Ix8P3PKi6sC6XLGtO0rB8ElNikaTRpde7NDtwHZ3JP9Udlve+f6hr1MsIq/+q/FLp5DfqXSK81bebk0d6LJE6wytZjY/lI9Rkb963nIbR3hcZy4fS5Lf1JaN9HWVjnY0/8H+A3vZVtLazzUTspNT1n/+COSanpOfuHRe9YaN9HWVjng9Zw5Ko8r5D90B5L6uMyywA68fi2B+X10ooByRFDiGfE553oYs9qwzkPc/ZDkj1TL4gf60xneLZfwP8L3Lp3q6xf1TZfCX6s1nFz5zIBS5Ysqg==
+   eJztl80KwjAMgJu3G/7soOiO4kUZ+v5nJ7M4Q6mxXX6G+SCwkSVZmzZpQ3izhvDBHr1jfcusn8bHOme53GGUf41vhWaYg9VLap85fUpy9XVRxA5Gmds2l4/SmDm7bz0vgntXypYKpc/NGa8G3x+20M7HBsXfwm96Ld9caOdj6ZTUdMn+QbUpqemS/UOjdzzx/WEL7XzgGh45Mv9Xyn/qjFUb4zBIBzzjmfrumOeLawwRiTGk6DMxL0iX+5Ybyn2Ych6SOjOdkd9YZxrFu71jlxtxTZyMrh1qH30AqBAqqw==
   </data>
  </layer>
  <layer id="5" name="checkpoints" width="50" height="30">
@@ -24,7 +24,7 @@
  </layer>
  <layer id="3" name="walls" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJxjY2RgYBsmuI1h6II9DAh/DHUw6o/BBXD5Y6DzKyFMrD+oBZDzIC3LEnqkK3ra0UkHO2gF9jOgxjm90y617KNX/TFqx+CxAzntDkQeHOj6YbT+GB52DJf6YyDSLi3sHsppd7QeJB6M1h+0qz+kgZiTjn60B9qlS2F8DKR/SHE/uj/ISbvU9g857gcBXPUHDOxFkpcFsrnx+GcVBf6Zgcf9jkCsj2R2O5IcqXkIGeDzDzUBzP34ACX+GEyA3PinV1zAAHqaGikYAOzWIJc=
+   eJxjY2RgYBsmuI1h6II9DAh/DHUw6o/BBXD5Y6DzKyFMrD+oBZDzIC3LEnqkK3ra0UkHO2gF9jOgxjm90y617KNX/TFqx+CxAzntDkQeHOj6YbT+GB52DJf6YyDSLi3sHsppd7QeJB6M1h+0qz+kgZiTjn60B9qlS2F8DKR/SHE/uj/ISbvU9g857gcBXPUHDOxFkpcFsrnx+GcVBf6ZQYL7HYFYn0i7YGAPFvfh8w8tASnuJyev0BqQ4/7B5A9K3D/UMQBOoSHh
   </data>
  </layer>
 </map>

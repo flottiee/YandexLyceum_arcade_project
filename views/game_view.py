@@ -35,7 +35,8 @@ class GameView(arcade.View):
         self.race_track = self.map.sprite_lists.get('race_track', arcade.SpriteList())
         self.objects = self.map.sprite_lists.get('objects', arcade.SpriteList())
         self.finish_line = self.map.sprite_lists.get('finish_line', arcade.SpriteList())
-        
+        self.obstacles = self.map.sprite_lists.get('obstacles', arcade.SpriteList())
+
         self.walls = arcade.SpriteList(use_spatial_hash=True)
         if 'walls' in self.map.sprite_lists:
             self.walls.extend(self.map.sprite_lists['walls'])
@@ -78,6 +79,7 @@ class GameView(arcade.View):
         
         self.world_camera.use()
         self.race_track.draw()
+        self.obstacles.draw()
         self.objects.draw()
         self.car_list.draw()
         
@@ -105,14 +107,24 @@ class GameView(arcade.View):
         right = arcade.key.RIGHT in self.pressed_keys or arcade.key.D in self.pressed_keys
 
         self.car.update_input(up, down, left, right)
-        self.car.update_car()
+        self.car.update_car(dt)
+        if arcade.check_for_collision_with_list(self.car, self.obstacles):
+            self.car.start_slide()
+        self.car.update_animation_car(dt)
+
         self.engine.update()
 
+        if arcade.check_for_collision_with_list(self.car, self.finish_line) and self.is_on_finish_line == False:
+            self.is_on_finish_line = True
+            self.lap_complete.play()
+        elif not arcade.check_for_collision_with_list(self.car, self.finish_line):
+            self.is_on_finish_line = False
+
         on_line_now = arcade.check_for_collision_with_list(self.car, self.finish_line)
-        
+
         if on_line_now and not self.on_line_last_frame:
             self.handle_finish_line_collision()
-            
+
         self.on_line_last_frame = bool(on_line_now)
 
         if arcade.check_for_collision_with_list(self.car, self.checkpoints):
