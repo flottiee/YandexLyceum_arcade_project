@@ -11,11 +11,9 @@ class GameView(arcade.View):
         self.level_index = level_index
         self.level_data = constants.LEVELS[level_index]
         
-        # Камеры
         self.world_camera = arcade.Camera2D()
         self.gui_camera = arcade.Camera2D()
         
-        # Состояния гонки
         self.race_started = False
         self.is_wrong_way_blocked = False  # Флаг, если заехал сзади
         self.start_time = 0.0
@@ -27,7 +25,6 @@ class GameView(arcade.View):
         self.setup()
 
     def setup(self):
-        # Инициализация машины (передаем ID или весь конфиг)
         self.car = Car(self.level_data["track_id"])
         self.car_list = arcade.SpriteList()
         self.car_list.append(self.car)
@@ -45,23 +42,35 @@ class GameView(arcade.View):
 
         self.engine = arcade.PhysicsEngineSimple(self.car, self.walls)
         
-        # Чекпоинты (опционально для доп. валидации круга)
+        layer_options = {
+            "checkpoints": {
+                "use_spatial_hash": True,
+            },
+            "finish_line": {
+                "use_spatial_hash": True,
+            }
+        }
+
+        self.map = arcade.load_tilemap(
+            self.level_data["map_path"], 
+            scaling=0.5, 
+            layer_options=layer_options
+        )
+        
         self.checkpoints = self.map.sprite_lists.get('checkpoints', arcade.SpriteList())
-        self.passed_checkpoint = False
+        self.finish_line = self.map.sprite_lists.get('finish_line', arcade.SpriteList())
 
         if len(self.checkpoints) == 0:
-            print("ПРЕДУПРЕЖДЕНИЕ: Слой checkpoints не найден или пуст!")
+            print("ПРЕДУПРЕЖДЕНИЕ: Слой checkpoints все еще пуст!")
 
     def on_draw(self):
         self.clear()
         
-        # 1. Отрисовка игрового мира
         self.world_camera.use()
         self.race_track.draw()
         self.objects.draw()
         self.car_list.draw()
         
-        # 2. Отрисовка интерфейса (Таймер)
         self.gui_camera.use()
         self.draw_hud()
 
@@ -80,7 +89,6 @@ class GameView(arcade.View):
                              arcade.color.RED, 30, anchor_x="center")
 
     def on_update(self, dt):
-        # Управление
         up = arcade.key.UP in self.pressed_keys or arcade.key.W in self.pressed_keys
         down = arcade.key.DOWN in self.pressed_keys or arcade.key.S in self.pressed_keys
         left = arcade.key.LEFT in self.pressed_keys or arcade.key.A in self.pressed_keys
@@ -90,16 +98,13 @@ class GameView(arcade.View):
         self.car.update_car()
         self.engine.update()
 
-        # Логика пересечения финиша
         on_line_now = arcade.check_for_collision_with_list(self.car, self.finish_line)
         
-        # Срабатывает только в момент наезда на линию (событие "Enter")
         if on_line_now and not self.on_line_last_frame:
             self.handle_finish_line_collision()
             
         self.on_line_last_frame = bool(on_line_now)
 
-        # Проверка чекпоинта
         if arcade.check_for_collision_with_list(self.car, self.checkpoints):
             self.passed_checkpoint = True
 
@@ -107,16 +112,12 @@ class GameView(arcade.View):
 
     def handle_finish_line_collision(self):
         """Логика старта, финиша и проверки направления"""
-        # Считаем вектор направления машины
         angle_rad = math.radians(self.car.angle)
         car_dir_x = math.sin(angle_rad)
         car_dir_y = math.cos(angle_rad)
         
-        # Вектор правильного направления линии из конфига (например 0, 1)
         finish_dir = self.level_data.get("finish_dir", (0, 1))
         
-        # Скалярное произведение (Dot Product)
-        # > 0 — едем правильно, < 0 — едем навстречу
         dot_product = (car_dir_x * finish_dir[0]) + (car_dir_y * finish_dir[1])
 
         if dot_product > 0:
@@ -126,15 +127,12 @@ class GameView(arcade.View):
                 self.start_time = time.time()
                 self.is_wrong_way_blocked = False
             elif self.is_wrong_way_blocked:
-                # Если ехал задом, а потом просто выехал передом — сбрасываем блок
                 self.is_wrong_way_blocked = False
             elif self.passed_checkpoint:
-                # ЧИСТЫЙ ФИНИШ
                 self.final_time = time.time() - self.start_time
                 self.lap_complete.play()
                 self.next_level()
         else:
-            # Игрок пересек линию с обратной стороны
             if self.race_started:
                 self.is_wrong_way_blocked = True
 
@@ -144,7 +142,6 @@ class GameView(arcade.View):
             new_view = GameView(next_idx)
             self.window.show_view(new_view)
         else:
-            # Передаем время в финальный экран
             self.window.show_view(FinishView(self.final_time))
 
     def update_camera(self):
