@@ -56,12 +56,22 @@ class GameView(arcade.View):
             scaling=0.5, 
             layer_options=layer_options
         )
+
+        self.passed_checkpoint = False 
+        self.race_started = False
+        self.is_wrong_way_blocked = False
         
         self.checkpoints = self.map.sprite_lists.get('checkpoints', arcade.SpriteList())
         self.finish_line = self.map.sprite_lists.get('finish_line', arcade.SpriteList())
 
         if len(self.checkpoints) == 0:
             print("ПРЕДУПРЕЖДЕНИЕ: Слой checkpoints все еще пуст!")
+
+        self.checkpoints = self.map.sprite_lists.get('checkpoints', arcade.SpriteList())
+        print(f"DEBUG: Количество объектов в слое checkpoints: {len(self.checkpoints)}")
+
+        for obj in self.checkpoints:
+            print(f"DEBUG: Обнаружен объект в {obj.center_x}, {obj.center_y}")
 
     def on_draw(self):
         self.clear()
