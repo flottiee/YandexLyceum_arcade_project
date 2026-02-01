@@ -36,13 +36,15 @@ class GameView(arcade.View):
         self.objects = self.map.sprite_lists.get('objects', arcade.SpriteList())
         self.finish_line = self.map.sprite_lists.get('finish_line', arcade.SpriteList())
         self.obstacles = self.map.sprite_lists.get('obstacles', arcade.SpriteList())
+        self.fon = self.map.sprite_lists.get('fon', arcade.SpriteList())
+        self.block_wall = self.map.sprite_lists.get('block_wall', arcade.SpriteList())
 
         self.walls = arcade.SpriteList(use_spatial_hash=True)
         if 'walls' in self.map.sprite_lists:
             self.walls.extend(self.map.sprite_lists['walls'])
 
         self.engine = arcade.PhysicsEngineSimple(self.car, self.walls)
-        
+
         layer_options = {
             "checkpoints": {
                 "use_spatial_hash": True,
@@ -78,9 +80,11 @@ class GameView(arcade.View):
         self.clear()
         
         self.world_camera.use()
+        self.fon.draw()
         self.race_track.draw()
         self.obstacles.draw()
         self.objects.draw()
+        self.car.draw_particles()
         self.car_list.draw()
         
         self.gui_camera.use()
@@ -129,6 +133,11 @@ class GameView(arcade.View):
 
         if arcade.check_for_collision_with_list(self.car, self.checkpoints):
             self.passed_checkpoint = True
+            if self.block_wall and len(self.block_wall) > 0:
+                for sprite in self.block_wall:
+                    if sprite not in self.walls:
+                        self.walls.append(sprite)
+                self.block_wall.clear()
 
         self.update_camera()
 

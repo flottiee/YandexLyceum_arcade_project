@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="1">
+ <tileset firstgid="1" source="../tsx_files/racing_track.tsx"/>
+ <tileset firstgid="325" source="../tsx_files/objects_64.tsx"/>
+ <layer id="1" name="race_track" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzlWEFOAzEM9F5pOXBv4QcUDtwLSMAX9k0gfsAbEPQFqOUL8AV4ARJccKSNZIId27vJgsDSqGrWu52JE0+2AH83ThuAQ8QFfMcejm83el5tUB5SnOD1c5AxbWx5tTFVdLQk9wBzz/Bzl3A+yuTVBtUReXDxgXhlcinnRbeW5oy22kF55H7zHb5qfu7Gj5U1NFFqbI1HxArkfWGZu7QWL4in7toS798X1s4Mx7cG6oj8N5CfL8u6kmpRM/rwz62BXC08fLz9k+N/D/p+l9ZA31oMmU+O/xpxZ/ztNKRaWHyuFn+tvpwPSrXw+pxlPaSQ+FvmJ/VB2pPpvmgNzyqxHjT+Vx20fiV5i8Wva/KP9Q1nidy5wqND8+vS/YrOTwv8uaKkjjH6VUkdC6FvleAfcIm4Zp4fzyKldNTqV1bsDNChnQ1L9itr9NGROxum/UrzzNS3vPlDdHjC4pnUt7z5Y+mw7CXv3uO4jKmDeqbkW978n9Bh8aC+nvXfdEh+F/AgjOfem6Vne/Mt7+fpnnsTvt8m4zX2s8d7Ux3R7yT+EVYd9L3Z4qXefO6+EBa/C7hRrnPvzdqzvfkl/6P5jfEJYMgv8Q==
+  </data>
+ </layer>
+ <layer id="7" name="fon" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzllVEOwCAIQ72S97/cfhfjlJaCG2viz0T0SXG9tdaLj5mscdHyMMxynJSH4Z7jDUI4ELZsr1tjGa9F9Say7y4umgEVWotsv6gYWI4sMX2ReX51XbPvGL0ftBbR8tTXWgvFeaL9qeI4+V6N+z/NMWdWaZYT7WOGQ6VVbhXHaVXgYP4PjF9U/Y72n3Vux2KNRfsqgkP1dnrjMzis8vp1Nb9bO8ZW4EB9q/r+Zw6Fov02rqvEoWaJfo+f1ilZ0NzsWZge/sK4AJvufcI=
+  </data>
+ </layer>
+ <layer id="2" name="objects" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztmNsKwjAMhtfX84QHOi8FLxRR8P3vVLoJFts/a5uYSj8oY8vW5G+WEtp1YRbm835p4vYdsKPvp9obdXMk5vNm3JBknemPqo2bXB0l2BeIQUKHffq4MvvRkI9/IVZjHPVnhzn74Tr+17blVIzU+tGyH4/MMuJZgT7Jt+eA1jukY2vciIHi9u05pOrwe1ouNsYNRKoOKajrJaHjDuZAdgra80EF6Ujdd+egxqfaEbX0Vwem9dbGr3ScC/tFOij+SseUAiUfr/72Enmvr0QHB6Echp6fWp2/QWc40mc839CWDw17hjZKnyNLnlM/AB+OH1k=
+  </data>
+ </layer>
+ <layer id="4" name="finish_line" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzwENACAMBLH594AGNOAME0t+gVbBXRUAAAAAMMlJBzTZ6YAmr3ysdMAHLkPJAr0=
+  </data>
+ </layer>
+ <layer id="5" name="checkpoints" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzwEJAAAIBDHT2j+CJQQf2RLcVQFApr4OWOIjy5cPAAAA8gz/2AGZ
+  </data>
+ </layer>
+ <layer id="8" name="block_wall" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzwEJAAAIBDHT2j+CJQQf2RLcVQFAhr4OWOIjy5cPAAAA8g0ZZwGZ
+  </data>
+ </layer>
+ <layer id="3" name="walls" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztVl0KwzAITl8Hu9OgD73Hbjh2hLErbHdpX9ZBA07UfOaPDvqBpKitn7HGhPCL6Q9Fwld/GhTjhsuA+bVG5CFB0+f6tYYnj6uw73vP4w36arn17gVN92K6RfGVUKNGj1VuDn8pplSLefM9J3p6NHoOgZd/BI9p1aKl5PLX8tBqgSKHj9RjiC2C/wMltSjdT47nKncwNu99rRY95xznj+wPnYOlZxQH8j9Q5PCnmNhKMSt6D59e/W7lYd2/9sKfcqUrt1n63v1O40ucLBuaR4/zisaXOFm2GneM2jjywFHa796Z58kjdTek/JGZGefW5PSnvCSulq10nzTk+EvPXGfZcmIhvkceur1VHqkZ5NGn4qQ4lJ4jNfU551UNtO5/+h5da+PIwx8nrsi882Ak8w75ttefvxdC2ztET/kASZ2e3Q==
+  </data>
+ </layer>
+</map>

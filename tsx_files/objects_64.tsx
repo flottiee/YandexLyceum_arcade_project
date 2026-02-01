@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="objects_64" tilewidth="448" tileheight="256" tilecount="40" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="objects_64" tilewidth="1152" tileheight="1152" tilecount="43" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image source="../assets/objects/arrow_white.png" width="165" height="99"/>
@@ -122,6 +122,12 @@
   <image source="../assets/objects/light_white_2.png" width="98" height="235"/>
  </tile>
  <tile id="40">
-  <image source="../assets/racing_track.png" width="448" height="256"/>
+  <image source="../assets/racing_track.png" width="1152" height="1152"/>
+ </tile>
+ <tile id="41">
+  <image source="../assets/objects/arrow_white_2.png" width="165" height="99"/>
+ </tile>
+ <tile id="42">
+  <image source="../assets/objects/arrow_yellow_2.png" width="99" height="165"/>
  </tile>
 </tileset>

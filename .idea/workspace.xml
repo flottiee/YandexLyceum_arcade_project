@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d1723ac6-66b1-4e5d-8e49-2e9067198de7" name="Changes" comment="a few changes">
-      <change beforePath="$PROJECT_DIR$/assets/images/car_black_1l.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/car_black_1r.png" beforeDir="false" />
+    <list default="true" id="d1723ac6-66b1-4e5d-8e49-2e9067198de7" name="Changes" comment="I redesigned the turning system, small changes.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/entities/Car.py" beforeDir="false" afterPath="$PROJECT_DIR$/entities/Car.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tmx_files/track1.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/tmx_files/track1.tmx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tmx_files/track2.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/tmx_files/track2.tmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsx_files/objects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tsx_files/objects.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsx_files/objects_64.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tsx_files/objects_64.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsx_files/racing_track.xml" beforeDir="false" afterPath="$PROJECT_DIR$/tsx_files/racing_track.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsx_files/objects_64.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/tsx_files/objects_64.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/game_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/game_view.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -60,22 +56,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.1.executor": "Run",
-    "Python.Car.executor": "Run",
-    "Python.constants.executor": "Run",
-    "Python.entities.executor": "Run",
-    "Python.game_view.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/nikita/Documents/Pycharm_/Racing_game/images/black_car"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Car.executor&quot;: &quot;Run&quot;,
+    &quot;Python.constants.executor&quot;: &quot;Run&quot;,
+    &quot;Python.entities.executor&quot;: &quot;Run&quot;,
+    &quot;Python.game_view.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/nikita/Documents/Pycharm_/Racing_game/images/black_car&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/images/black_car" />
@@ -149,7 +145,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769713676705</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="I redesigned the turning system, small changes.">
+      <option name="closed" value="true" />
+      <created>1769798747534</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1769798747534</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -183,6 +187,7 @@
     <MESSAGE value="-new control system" />
     <MESSAGE value="add slide car on oil" />
     <MESSAGE value="a few changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="a few changes" />
+    <MESSAGE value="I redesigned the turning system, small changes." />
+    <option name="LAST_COMMIT_MESSAGE" value="I redesigned the turning system, small changes." />
   </component>
 </project>

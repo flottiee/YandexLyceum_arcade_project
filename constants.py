@@ -16,8 +16,11 @@ PLAYER_SCALE = 0.5
 PLAYER_START_X_TRACK_1 = 1056
 PLAYER_START_Y_TRACK_1 = 80
 # TRACK 2
-PLAYER_START_X_TRACK_2 = 482
-PLAYER_START_Y_TRACK_2 = 883
+PLAYER_START_X_TRACK_2 = 272
+PLAYER_START_Y_TRACK_2 = 851
+# TRACK 3
+PLAYER_START_X_TRACK_3 = 112
+PLAYER_START_Y_TRACK_3 = 80
 
 MIN_ZOOM = 1.2   # На максимальной скорости (отдаление)
 MAX_ZOOM = 2   # В покое (приближение)
@@ -41,6 +44,14 @@ LEVELS = [
         "finish_dir": (1, 0), # Вектор направления через финиш (направо)
         "world_width": 3200,
         "world_height": 1920
-    }
+    },
+    {
+        "map_path": "tmx_files/track3.tmx",
+        "track_id": 3,
+        "start_x": 112, "start_y": 80, "start_angle": 90,
+        "finish_dir": (1, 0), # Вектор направления через финиш (направо)
+        "world_width": 3200,
+        "world_height": 1920
+    },
 ]
 

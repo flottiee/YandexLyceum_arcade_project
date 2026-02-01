@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="3">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="10" nextobjectid="3">
  <tileset firstgid="1" source="../tsx_files/objects.tsx"/>
  <tileset firstgid="41" source="../tsx_files/racing_track.tsx"/>
  <tileset firstgid="365" source="../tsx_files/objects_64.tsx"/>
+ <layer id="8" name="fon" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztlEEOwCAIBO1H/P8zm94RQWEXTSfxghadCvantX7ZmME+X4TDyIdFlEMFbvH40DxGc1qMVf8ZHgwsHlLcuhaB9a6kuCWGwFNzUnwWG+Vm9s7vcb4HigyPKi6jeSmu5WKQ4cHsgQwPJDfU1Wp/zHIh2XmvtHzWvar0zsq6DLwenn+Nxuuxeq8ILPtL55S+q/LuevrA443uZWZd7BJR7xX8o++ywnuVXcMnOrDGCxxcSEw=
+  </data>
+ </layer>
  <layer id="1" name="race_track" width="50" height="30">
   <data encoding="base64" compression="zlib">
    eJztl0tOAzEMhp3L8FjQLQIWsEW8u0VQUbhBKTfgcQMel+IKhStwATwSljyR42TSOFONsPQt6ngi/05jzwAMxz6QF+Q7wgNy11OOKfaOfCVy+/fMxAGcuLh2K6Sa/nTQMULGyEGHZ6ygmko6npEFY87W9pEt5EKJt4bn86no4Gt+3aWzGEFdC+WqrfG6S2dBvtQ+UYL7DB2SX/LF+sSas7kf08I6yCfdlXnAvywz5MZIh3/OtCb5LexfR9s3FB1PIPcXyW89z3N0vDFfTbR5nqPjFXmE1Z3nqTpqWs4876qjxjuw5TxvbMz8tciZ59RzQvXg710N1u/BufNcQotdpbsT66fTwB78/Pr6HuQ6tH7qn+t5RHPt+dHUcQ97zqaDqE1Y3Bm0e3sNtH5FbLiwHuqv164dt4Osu/7moHYPeJ48/y66S5o2v/x7sBvIU8pfiit5ny+9/bQ56Bv9PyQ9xDGuXSXEpXIa+H2o7J3a2yU9lP+R0+OWzZ/QdPjzPFWPn38obgHl2A7sJ83zIdgvF3scaA==
@@ -15,7 +20,7 @@
  </layer>
  <layer id="2" name="objects" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJxjYMAE1YxYBEcI4ETjc9NYXgiNHs5gCiMEDwUwEuKDH4qHAsAXHwJ0c8UogIGRkD/oAfgoVEOMfnQgSoae4QJksIjJIbEnEqifCMkrk+qgQQ5EBtoBowAFDNdyd6iWScIU6EX283ArNwYKoOcPWqYrSvvJ2PQPt/w9UusPPgby2mYgQGk/GZ9+Usurkdy34kLjc1Aojw2Qmt+7GSF4uIEeRuxseoORWl4NVgDLH+jtI2LbS8Soo1U+h5W1yHkcAE6kC+Y=
+   eJxjYMAE1YxYBEcI4ETjc9NYXgiNHs5gCiMEDwUwEuKDH4qHAsAXHwJ0c8UogIGRkD/oAfgoVEOMfnQgSoaeoQ6KoPWODBY5OST2RAL1EyF5ZVIcNQSAyEA7YBSggOFa7g7VMkmYAr3Ifh5u5cZAAfT8Qct0RWk/GZt+aufvAkZE3QcCuXTuf1Gr/kD3x2AHfAzktc1AgNJ+Mj79pJZXI7lvxYXG56BQHhsgNb93M0LwcAM9jNjZ9Aaj7d3BBWD5A719RGx7iRh1tMrnsLIWOY8DANLIDo8=
   </data>
  </layer>
  <layer id="3" name="walls" width="50" height="30">
@@ -31,6 +36,11 @@
  <layer id="6" name="checkpoints" width="50" height="30">
   <data encoding="base64" compression="zlib">
    eJztz0ERAAAEAEES6N9WBQ/GZzfBXQQAE5XfBTt8AAAAANxoXhoAMQ==
+  </data>
+ </layer>
+ <layer id="9" name="block_wall" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztz0ERAAAEAEES6N9WAj/GZzfBXQQAk8rvgh0+AAAAAO41YFoAMQ==
   </data>
  </layer>
 </map>
