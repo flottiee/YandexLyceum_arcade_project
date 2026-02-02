@@ -7,11 +7,11 @@ import constants
 
 
 class Car(arcade.Sprite):
-    def __init__(self, track, player_id=1): # Изменено: добавлен player_id
+    def __init__(self, track, player_id=1, control_type="arrows"): # Изменено: добавлен player_id
         super().__init__()
-        # Выбор текстуры в зависимости от игрока
-        texture_path = "assets/images/car_black_1.png" if player_id == 1 else "assets/images/car_red_1.png"
-        self.texture = arcade.load_texture(texture_path)
+        img = "assets/images/car_black_1.png" if control_type == "arrows" else "assets/images/car_black_1.png"
+        self.texture = arcade.load_texture(img)
+        self.control_type = control_type
         self.scale = constants.PLAYER_SCALE
         self.player_id = player_id
 
@@ -59,6 +59,8 @@ class Car(arcade.Sprite):
         self.exhaust_particles_count = 0
         self.exhaust_particles_spawn_timer = 0
         self.exhaust_particles_spawn_rate = 0.01
+
+        self.is_finished = False
 
     def start_slide(self):
         self.is_slides_on_oil = True
