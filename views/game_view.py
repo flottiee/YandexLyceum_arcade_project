@@ -114,7 +114,6 @@ class GameView(arcade.View):
         self.car.update_car(dt)
         if arcade.check_for_collision_with_list(self.car, self.obstacles):
             self.car.start_slide()
-        self.car.update_animation_car(dt)
 
         self.engine.update()
 
