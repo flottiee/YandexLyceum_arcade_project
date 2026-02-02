@@ -238,19 +238,19 @@ class Car(arcade.Sprite):
         # Определяем базовое направление: влево (+1), вправо (-1)
         direction = 0
         if self.input_left:
-            direction = 1
-        elif self.input_right:
             direction = -1
+        elif self.input_right:
+            direction = 1
 
         # Множитель масла (только если нажат поворот!)
-        oil_boost = 3.0 if self.is_slides_on_oil else 1.0
+        oil_boost = 4.0 if self.is_slides_on_oil else 1.0
         
         # Итоговое количество градусов, на которое повернем
         turn_amount = direction * self.turn_speed * turn_mod * oil_boost
 
         # ПРИМЕНЕНИЕ ПОВОРОТА
         # ВНИМАНИЕ: Если руль инвертирован, просто смени += на -= здесь и ВСЁ.
-        self.angle -= turn_amount 
+        self.angle += turn_amount 
 
         # 4. ФИЗИКА ГАЗА И ТОРМОЗА (Очищенная от старых else)
         if self.input_up:
@@ -280,12 +280,20 @@ class Car(arcade.Sprite):
         self.update_slide_particles(dt)
 
     def hit_oil(self):
-        """Реализация ТЗ: включаем оверстиринг на 1.5 секунды"""
-        self.timer_slide = 1.5 
-        # self.is_slides_on_oil станет True автоматически в update_car, пока тикает таймер
+        """Увеличиваем время действия масла до 2.5 секунд"""
+        if self.timer_slide <= 0:
+            self.timer_slide = 2.5
     
     def on_wall_hit(self):
-        """Реализация ТЗ: Гашение скорости при ударе об стену"""
-        self.speed *= 0.5  # Коэффициент можно настроить (0.5 = потеря половины скорости)
-
-    
+        """
+        Вместо умножения на 0.5, вычитаем фиксированное значение.
+        Это создаст эффект сильного сопротивления (трения) о борт.
+        """
+        penalty = 0.15 # Сила торможения об стену
+        if self.speed > 0:
+            self.speed = max(0, self.speed - penalty)
+        elif self.speed < 0:
+            self.speed = min(0, self.speed + penalty)
+        
+        # Дополнительно можно еще немного гасить скорость множителем
+        self.speed *= 0.95

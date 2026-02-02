@@ -38,6 +38,7 @@ class GameView(arcade.View):
         self.obstacles = self.map.sprite_lists.get('obstacles', arcade.SpriteList())
         self.fon = self.map.sprite_lists.get('fon', arcade.SpriteList())
         self.block_wall = self.map.sprite_lists.get('block_wall', arcade.SpriteList())
+        self.oil_list = self.map.sprite_lists.get('oil', arcade.SpriteList())
 
         self.walls = arcade.SpriteList(use_spatial_hash=True)
         if 'walls' in self.map.sprite_lists:
@@ -84,6 +85,7 @@ class GameView(arcade.View):
         self.race_track.draw()
         self.obstacles.draw()
         self.objects.draw()
+        self.oil_list.draw()
         self.car.draw_particles()
         self.car_list.draw()
         
@@ -137,6 +139,14 @@ class GameView(arcade.View):
                     if sprite not in self.walls:
                         self.walls.append(sprite)
                 self.block_wall.clear()
+        
+        # Проверка столкновения со стенами
+        if arcade.check_for_collision_with_list(self.car, self.walls):
+            self.car.on_wall_hit()
+        
+        # Проверка масла
+        if arcade.check_for_collision_with_list(self.car, self.oil_list):
+            self.car.hit_oil()
 
         self.update_camera()
 

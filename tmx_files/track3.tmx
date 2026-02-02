@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="9" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="10" nextobjectid="1">
  <tileset firstgid="1" source="../tsx_files/racing_track.tsx"/>
  <tileset firstgid="325" source="../tsx_files/objects_64.tsx"/>
+ <tileset firstgid="368" source="../tsx_files/objects.tsx"/>
  <layer id="1" name="race_track" width="50" height="30">
   <data encoding="base64" compression="zlib">
    eJzlWEFOAzEM9F5pOXBv4QcUDtwLSMAX9k0gfsAbEPQFqOUL8AV4ARJccKSNZIId27vJgsDSqGrWu52JE0+2AH83ThuAQ8QFfMcejm83el5tUB5SnOD1c5AxbWx5tTFVdLQk9wBzz/Bzl3A+yuTVBtUReXDxgXhlcinnRbeW5oy22kF55H7zHb5qfu7Gj5U1NFFqbI1HxArkfWGZu7QWL4in7toS798X1s4Mx7cG6oj8N5CfL8u6kmpRM/rwz62BXC08fLz9k+N/D/p+l9ZA31oMmU+O/xpxZ/ztNKRaWHyuFn+tvpwPSrXw+pxlPaSQ+FvmJ/VB2pPpvmgNzyqxHjT+Vx20fiV5i8Wva/KP9Q1nidy5wqND8+vS/YrOTwv8uaKkjjH6VUkdC6FvleAfcIm4Zp4fzyKldNTqV1bsDNChnQ1L9itr9NGROxum/UrzzNS3vPlDdHjC4pnUt7z5Y+mw7CXv3uO4jKmDeqbkW978n9Bh8aC+nvXfdEh+F/AgjOfem6Vne/Mt7+fpnnsTvt8m4zX2s8d7Ux3R7yT+EVYd9L3Z4qXefO6+EBa/C7hRrnPvzdqzvfkl/6P5jfEJYMgv8Q==
@@ -15,6 +16,11 @@
  <layer id="2" name="objects" width="50" height="30">
   <data encoding="base64" compression="zlib">
    eJztmNsKwjAMhtfX84QHOi8FLxRR8P3vVLoJFts/a5uYSj8oY8vW5G+WEtp1YRbm835p4vYdsKPvp9obdXMk5vNm3JBknemPqo2bXB0l2BeIQUKHffq4MvvRkI9/IVZjHPVnhzn74Tr+17blVIzU+tGyH4/MMuJZgT7Jt+eA1jukY2vciIHi9u05pOrwe1ouNsYNRKoOKajrJaHjDuZAdgra80EF6Ujdd+egxqfaEbX0Vwem9dbGr3ScC/tFOij+SseUAiUfr/72Enmvr0QHB6Echp6fWp2/QWc40mc839CWDw17hjZKnyNLnlM/AB+OH1k=
+  </data>
+ </layer>
+ <layer id="9" name="oil" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1DEKACAMA8D25z7dtYOj0KJ3LwghJAKAG1Z2JwD4h8890wtQ+QReZdvAZBuRhAKG
   </data>
  </layer>
  <layer id="4" name="finish_line" width="50" height="30">
