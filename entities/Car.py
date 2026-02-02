@@ -7,10 +7,13 @@ import constants
 
 
 class Car(arcade.Sprite):
-    def __init__(self, track):
+    def __init__(self, track, player_id=1, control_type=""):
         super().__init__()
-        self.texture = arcade.load_texture("assets/images/car_black_1.png")
+        img = "assets/images/car_black_1.png" if control_type == "arrows" else "assets/images/car_black_1.png"
+        self.texture = arcade.load_texture(img)
+        self.control_type = control_type
         self.scale = constants.PLAYER_SCALE
+        self.player_id = player_id
 
         if track == 1:
             self.center_x = constants.PLAYER_START_X_TRACK_1
@@ -24,6 +27,8 @@ class Car(arcade.Sprite):
 
         self.angle = 90
 
+        self.is_oversteering = False  
+        self.oversteer_timer = 0.0    
         self.acceleration = 0.2
         self.speed = 0
         self.brake_deceleration = 0.8
@@ -54,6 +59,8 @@ class Car(arcade.Sprite):
         self.exhaust_particles_count = 0
         self.exhaust_particles_spawn_timer = 0
         self.exhaust_particles_spawn_rate = 0.01
+
+        self.is_finished = False
 
     def start_slide(self):
         self.is_slides_on_oil = True
@@ -208,76 +215,86 @@ class Car(arcade.Sprite):
         self.input_right = right
 
     def update_car(self, dt):
-        if not self.is_slides_on_oil and self.timer_after_slide <= 0:
-            self.steering_direction = 0
-            if self.input_right and not self.input_down:
-                self.steering_direction = 1
-            elif self.input_left and not self.input_down:
-                self.steering_direction = -1
-            elif self.input_right and self.input_down:
-                self.steering_direction = -1
-            elif self.input_left and self.input_down:
-                self.steering_direction = 1
-
-            if abs(self.speed) > 0.1:
-                turn_multiplier = 1.0 - min(abs(self.speed) / self.max_forward_speed, 0.7)
-                self.angle += self.steering_direction * self.turn_speed * turn_multiplier
-
-            if self.input_up:
-                self.speed += self.acceleration
-                self.spawn_exhaust_particles()
-                if self.speed > self.max_forward_speed:
-                    self.speed = self.max_forward_speed
-            elif self.input_down:
-                if self.speed > 0:
-                    self.speed -= self.brake_deceleration
-                    if self.speed < 0:
-                        self.speed = 0
-                else:
-                    self.speed -= self.acceleration * 0.7
-                    if self.speed < self.max_reverse_speed:
-                        self.speed = self.max_reverse_speed
-            else:
-                if self.speed > 0:
-                    self.speed -= self.natural_deceleration
-                    if self.speed < 0:
-                        self.speed = 0
-                elif self.speed < 0:
-                    self.speed += self.natural_deceleration
-                    if self.speed > 0:
-                        self.speed = 0
-
-            angle_rad = math.radians(self.angle)
-            self.change_x = self.speed * math.sin(angle_rad)
-            self.change_y = self.speed * math.cos(angle_rad)
-
+        # 1. ЛОГИКА МАСЛА
+        if self.timer_slide > 0:
+            self.timer_slide -= dt
+            self.is_slides_on_oil = True
         else:
-            if self.is_slides_on_oil:
-                self.slide_particle_spawn_timer += dt
-                while self.slide_particle_spawn_timer >= self.slide_particle_spawn_rate:
-                    self.spawn_slide_particle()
-                    self.slide_particle_spawn_timer -= self.slide_particle_spawn_rate
-                self.timer_slide += dt
-                if self.timer_slide >= 2:
-                    self.is_slides_on_oil = False
-                    self.timer_slide = 0
+            self.is_slides_on_oil = False
 
+        # 2. ОГРАНИЧЕНИЕ ПОВОРОТА
+        # Рассчитываем множитель от 0.0 до 1.0
+        speed_ratio = abs(self.speed) / self.max_forward_speed
+        
+        if speed_ratio < 0.1:
+            # трение высокое, чтобы поворачивать
+            turn_mod = 0.0
+        elif speed_ratio < 0.5:
+            # норм управление
+            turn_mod = speed_ratio * 2.0
+        else:
+            # После 50% скорости руль становится "тяжелым"
+            turn_mod = max(0.4, 1.3 - speed_ratio)
 
+        # 3. РАСЧЕТ СИЛЫ ПОВОРОТА
+        direction = 0
+        if self.input_left:
+            direction = -1
+        elif self.input_right:
+            direction = 1
 
-            if self.timer_after_slide > 0:
-                self.timer_after_slide -= dt
+        # Множитель масла (только если нажат поворот!)
+        oil_boost = 4.0 if self.is_slides_on_oil else 1.0
+        
+        # Итоговое количество градусов, на которое повернем
+        turn_amount = direction * self.turn_speed * turn_mod * oil_boost
 
-            self.speed = 3 * dt
+        # ПРИМЕНЕНИЕ ПОВОРОТА
+        # ВНИМАНИЕ: Если руль инвертирован, просто заменить += на -= здесь и ВСЁ.
+        self.angle += turn_amount 
 
-            self.center_x += self.speed
-            self.center_y += self.speed
+        # 4. ФИЗИКА ГАЗА И ТОРМОЗА 
+        if self.input_up:
+            self.speed += self.acceleration
+            if self.speed > self.max_forward_speed:
+                self.speed = self.max_forward_speed
+        elif self.input_down:
+            self.speed -= self.brake_deceleration
+            if self.speed < self.max_reverse_speed:
+                self.speed = self.max_reverse_speed
+        else:
+            # Трение (естественная остановка)
+            if self.speed > 0:
+                self.speed = max(0, self.speed - self.natural_deceleration)
+            elif self.speed < 0:
+                self.speed = min(0, self.speed + self.natural_deceleration)
 
+        # 5. ОБНОВЛЕНИЕ ВЕКТОРОВ
+        angle_rad = math.radians(self.angle)
+        self.change_x = self.speed * math.sin(angle_rad)
+        self.change_y = self.speed * math.cos(angle_rad)
+
+        # Частицы и визуализация
         self.update_exhaust_particles(dt)
+        if self.is_slides_on_oil:
+            self.spawn_slide_particle()
         self.update_slide_particles(dt)
 
-    def update_animation_car(self, dt):
-        if self.is_slides_on_oil:
-            self.texture_change_time += dt
-            if self.texture_change_time >= constants.TEXTURE_CHANGE_DELAY:
-                self.texture_change_time = 0
-                self.angle = (self.angle + 45) % 360
+    def hit_oil(self):
+        """Увеличиваем время действия масла до 2.5 секунд"""
+        if self.timer_slide <= 0:
+            self.timer_slide = 2.5
+    
+    def on_wall_hit(self):
+        """
+        Вместо умножения на 0.5, вычитаем фиксированное значение.
+        Это создаст эффект сильного сопротивления (трения) о борт.
+        """
+        penalty = 0.15 # Сила торможения об стену
+        if self.speed > 0:
+            self.speed = max(0, self.speed - penalty)
+        elif self.speed < 0:
+            self.speed = min(0, self.speed + penalty)
+        
+        # Дополнительно можно еще немного гасить скорость множителем
+        self.speed *= 0.95

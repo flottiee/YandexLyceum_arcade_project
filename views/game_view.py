@@ -1,3 +1,5 @@
+import datetime
+import json
 import arcade
 import constants
 import time
@@ -9,25 +11,38 @@ class GameView(arcade.View):
     def __init__(self, level_index):
         super().__init__()
         self.level_index = level_index
+        # таймеры
+        self.p1_time = 0.0
+        self.p2_time = 0.0
+        self.start_time = 0.0  
+        self.final_time = 0.0  
+        self.race_active = True
+        self.level_index = level_index
         self.level_data = constants.LEVELS[level_index]
         
         self.world_camera = arcade.Camera2D()
         self.gui_camera = arcade.Camera2D()
-        
-        self.race_started = False
-        self.is_wrong_way_blocked = False  # Флаг, если заехал сзади
-        self.start_time = 0.0
-        self.final_time = 0.0
-        
+
         self.pressed_keys = set()
-        self.on_line_last_frame = False # Для фиксации момента пересечения
+        
+        self.p1_started = False
+        self.p2_started = False
+        self.p1_passed_checkpoint = False
+        self.p2_passed_checkpoint = False
+        self.p1_on_line_last_frame = False
+        self.p2_on_line_last_frame = False
+        self.p1_wrong_way = False
+        self.p2_wrong_way = False
         
         self.setup()
 
     def setup(self):
-        self.car = Car(self.level_data["track_id"])
+        self.p1 = Car(self.level_data["track_id"], control_type="arrows")
+        self.p2 = Car(self.level_data["track_id"], control_type="wasd")
+        
         self.car_list = arcade.SpriteList()
-        self.car_list.append(self.car)
+        self.car_list.append(self.p1)
+        self.car_list.append(self.p2)
 
         self.lap_complete = arcade.load_sound('sounds/lap_complete.mp3')
         self.map = arcade.load_tilemap(self.level_data["map_path"], 0.5)
@@ -38,12 +53,14 @@ class GameView(arcade.View):
         self.obstacles = self.map.sprite_lists.get('obstacles', arcade.SpriteList())
         self.fon = self.map.sprite_lists.get('fon', arcade.SpriteList())
         self.block_wall = self.map.sprite_lists.get('block_wall', arcade.SpriteList())
+        self.oil_list = self.map.sprite_lists.get('oil', arcade.SpriteList())
 
         self.walls = arcade.SpriteList(use_spatial_hash=True)
         if 'walls' in self.map.sprite_lists:
             self.walls.extend(self.map.sprite_lists['walls'])
 
-        self.engine = arcade.PhysicsEngineSimple(self.car, self.walls)
+        self.engine1 = arcade.PhysicsEngineSimple(self.p1, self.walls)
+        self.engine2 = arcade.PhysicsEngineSimple(self.p2, self.walls)
 
         layer_options = {
             "checkpoints": {
@@ -84,13 +101,21 @@ class GameView(arcade.View):
         self.race_track.draw()
         self.obstacles.draw()
         self.objects.draw()
-        self.car.draw_particles()
+        self.oil_list.draw()
+        for car in self.car_list:
+            car.draw_particles()
         self.car_list.draw()
         
         self.gui_camera.use()
         self.draw_hud()
 
     def draw_hud(self):
+        t1 = f"P1: {self.p1_time:.2f}" if self.p1_started else "P1: ЖДЕТ СТАРТА"
+        t2 = f"P2: {self.p2_time:.2f}" if self.p2_started else "P2: ЖДЕТ СТАРТА"
+        
+        arcade.draw_text(t1, 20, self.window.height - 40, arcade.color.WHITE, 16, font_name="Kenney Future")
+        arcade.draw_text(t2, 20, self.window.height - 70, arcade.color.RED, 16, font_name="Kenney Future")
+
         if self.race_started:
             elapsed = time.time() - self.start_time
             text = f"ВРЕМЯ: {elapsed:.2f} сек"
@@ -100,72 +125,96 @@ class GameView(arcade.View):
         arcade.draw_text(text, 20, self.window.height - 40, 
                          arcade.color.WHITE, 20, font_name="Kenney Future")
         
-        if self.is_wrong_way_blocked:
+        if self.p1_wrong_way or self.p2_wrong_way:
             arcade.draw_text("НЕВЕРНОЕ НАПРАВЛЕНИЕ!", self.window.width/2, 50,
                              arcade.color.RED, 30, anchor_x="center")
 
     def on_update(self, dt):
-        up = arcade.key.UP in self.pressed_keys or arcade.key.W in self.pressed_keys
-        down = arcade.key.DOWN in self.pressed_keys or arcade.key.S in self.pressed_keys
-        left = arcade.key.LEFT in self.pressed_keys or arcade.key.A in self.pressed_keys
-        right = arcade.key.RIGHT in self.pressed_keys or arcade.key.D in self.pressed_keys
+        self.p1.update_input(
+            arcade.key.UP in self.pressed_keys, arcade.key.DOWN in self.pressed_keys,
+            arcade.key.LEFT in self.pressed_keys, arcade.key.RIGHT in self.pressed_keys
+        )
+        self.p2.update_input(
+            arcade.key.W in self.pressed_keys, arcade.key.S in self.pressed_keys,
+            arcade.key.A in self.pressed_keys, arcade.key.D in self.pressed_keys
+        )
 
-        self.car.update_input(up, down, left, right)
-        self.car.update_car(dt)
-        if arcade.check_for_collision_with_list(self.car, self.obstacles):
-            self.car.start_slide()
-        self.car.update_animation_car(dt)
+        if not self.p1.is_finished:
+            if self.p1_started: self.p1_time += dt
+            self.p1.update_car(dt)
+            self.engine1.update()
+            
+        if not self.p2.is_finished:
+            if self.p2_started: self.p2_time += dt
+            self.p2.update_car(dt)
+            self.engine2.update()
 
-        self.engine.update()
+        if not self.p1.is_finished:
+            if self.p1_started: self.p1_time += dt
+            self.p1.update_car(dt)
+            self.engine1.update()
+            
+        if not self.p2.is_finished:
+            if self.p2_started: self.p2_time += dt
+            self.p2.update_car(dt)
+            self.engine2.update()
 
-        if arcade.check_for_collision_with_list(self.car, self.finish_line) and self.is_on_finish_line == False:
-            self.is_on_finish_line = True
-            self.lap_complete.play()
-        elif not arcade.check_for_collision_with_list(self.car, self.finish_line):
-            self.is_on_finish_line = False
+        # ЦИКЛ ОБРАБОТКИ ЛОГИКИ ДЛЯ ОБОИХ ИГРОКОВ
+        for i, car in enumerate(self.car_list):
+            # масло и препятствия
+            if arcade.check_for_collision_with_list(car, self.obstacles): car.start_slide()
+            if arcade.check_for_collision_with_list(car, self.oil_list): car.hit_oil()
+            if arcade.check_for_collision_with_list(car, self.walls): car.on_wall_hit()
 
-        on_line_now = arcade.check_for_collision_with_list(self.car, self.finish_line)
+            # чекпоинты
+            if arcade.check_for_collision_with_list(car, self.checkpoints):
+                if i == 0: self.p1_passed_checkpoint = True
+                else: self.p2_passed_checkpoint = True
+                self.unlock_block_walls()
 
-        if on_line_now and not self.on_line_last_frame:
-            self.handle_finish_line_collision()
+            # финишная линия (логика пересечения)
+            on_line = arcade.check_for_collision_with_list(car, self.finish_line)
+            last_frame = self.p1_on_line_last_frame if i == 0 else self.p2_on_line_last_frame
+            
+            if on_line and not last_frame:
+                self.handle_finish_line_collision(car, i)
+            
+            if i == 0: self.p1_on_line_last_frame = bool(on_line)
+            else: self.p2_on_line_last_frame = bool(on_line)
 
-        self.on_line_last_frame = bool(on_line_now)
+        # Проверка завершения уровня
+        if self.p1.is_finished and self.p2.is_finished:
+            self.save_results()
+            self.next_level()
 
-        if arcade.check_for_collision_with_list(self.car, self.checkpoints):
-            self.passed_checkpoint = True
+        self.update_camera()
+
+    def unlock_block_walls(self):
+        # Блокировочная стена возникает только если оба пересекли чекпоинт
+        if self.p1_passed_checkpoint and self.p2_passed_checkpoint:
             if self.block_wall and len(self.block_wall) > 0:
                 for sprite in self.block_wall:
                     if sprite not in self.walls:
                         self.walls.append(sprite)
                 self.block_wall.clear()
 
-        self.update_camera()
+    def handle_finish_line_collision(self, car, player_idx):
+        angle_rad = math.radians(car.angle)
+        dot = (math.sin(angle_rad) * self.level_data.get("finish_dir", (0,1))[0]) + \
+              (math.cos(angle_rad) * self.level_data.get("finish_dir", (0,1))[1])
 
-    def handle_finish_line_collision(self):
-        """Логика старта, финиша и проверки направления"""
-        angle_rad = math.radians(self.car.angle)
-        car_dir_x = math.sin(angle_rad)
-        car_dir_y = math.cos(angle_rad)
-        
-        finish_dir = self.level_data.get("finish_dir", (0, 1))
-        
-        dot_product = (car_dir_x * finish_dir[0]) + (car_dir_y * finish_dir[1])
-
-        if dot_product > 0:
-            if not self.race_started:
-                # ПЕРВЫЙ СТАРТ
-                self.race_started = True
-                self.start_time = time.time()
-                self.is_wrong_way_blocked = False
-            elif self.is_wrong_way_blocked:
-                self.is_wrong_way_blocked = False
-            elif self.passed_checkpoint:
-                self.final_time = time.time() - self.start_time
-                self.lap_complete.play()
-                self.next_level()
+        if dot > 0:
+            if player_idx == 0:
+                if not self.p1_started: self.p1_started = True
+                elif self.p1_passed_checkpoint: car.is_finished = True; self.lap_complete.play()
+                self.p1_wrong_way = False
+            else:
+                if not self.p2_started: self.p2_started = True
+                elif self.p2_passed_checkpoint: car.is_finished = True; self.lap_complete.play()
+                self.p2_wrong_way = False
         else:
-            if self.race_started:
-                self.is_wrong_way_blocked = True
+            if player_idx == 0 and self.p1_started: self.p1_wrong_way = True
+            elif player_idx == 1 and self.p2_started: self.p2_wrong_way = True
 
     def next_level(self):
         next_idx = self.level_index + 1
@@ -176,26 +225,20 @@ class GameView(arcade.View):
             self.window.show_view(FinishView(self.final_time))
 
     def update_camera(self):
-        map_width = self.map.width * self.map.tile_width * self.map.scaling
-        map_height = self.map.height * self.map.tile_height * self.map.scaling
-
-        # Плавное следование за машиной
-        cam_x, cam_y = self.world_camera.position
-        new_x = cam_x + (self.car.center_x - cam_x) * constants.CAMERA_LERP
-        new_y = cam_y + (self.car.center_y - cam_y) * constants.CAMERA_LERP
-
-        # Динамический зум
-        speed_ratio = min(abs(self.car.speed) / self.car.max_forward_speed, 1.0)
-        target_zoom = constants.MAX_ZOOM - (speed_ratio * (constants.MAX_ZOOM - constants.MIN_ZOOM))
-        self.world_camera.zoom = self.world_camera.zoom + (target_zoom - self.world_camera.zoom) * constants.ZOOM_LERP
-
-        # Ограничение границ
-        half_w = (self.window.width / 2) / self.world_camera.zoom
-        half_h = (self.window.height / 2) / self.world_camera.zoom
+        # ИЗМЕНЕНО: Камера следит за двумя игроками
+        mid_x = (self.p1.center_x + self.p2.center_x) / 2
+        mid_y = (self.p1.center_y + self.p2.center_y) / 2
         
+        dist = math.sqrt((self.p1.center_x - self.p2.center_x)**2 + (self.p1.center_y - self.p2.center_y)**2)
+        
+        # Динамический зум под двоих
+        target_zoom = max(constants.MIN_ZOOM, min(constants.MAX_ZOOM, 1000 / (dist + 500)))
+        self.world_camera.zoom = arcade.math.lerp(self.world_camera.zoom, target_zoom, constants.ZOOM_LERP)
+        
+        cam_x, cam_y = self.world_camera.position
         self.world_camera.position = (
-            max(half_w, min(map_width - half_w, new_x)),
-            max(half_h, min(map_height - half_h, new_y))
+            arcade.math.lerp(cam_x, mid_x, constants.CAMERA_LERP),
+            arcade.math.lerp(cam_y, mid_y, constants.CAMERA_LERP)
         )
 
     def on_key_press(self, key, modifiers):
@@ -203,3 +246,23 @@ class GameView(arcade.View):
 
     def on_key_release(self, key, modifiers):
         self.pressed_keys.discard(key)
+
+    def save_results(self):
+        new_result = {
+            "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "level": self.level_index,
+            "p1_time": round(self.p1_time, 2),
+            "p2_time": round(self.p2_time, 2),
+            "winner": "P1" if self.p1_time < self.p2_time else "P2"
+        }
+
+        try:
+            with open("race_history.json", "r", encoding="utf-8") as f:
+                history = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            history = []
+
+        history.append(new_result)
+        
+        with open("race_history.json", "w", encoding="utf-8") as f:
+            json.dump(history, f, indent=4, ensure_ascii=False)

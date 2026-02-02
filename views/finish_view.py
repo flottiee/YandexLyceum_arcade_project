@@ -1,3 +1,4 @@
+import json
 import arcade
 import constants
 
@@ -26,3 +27,15 @@ class FinishView(arcade.View):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
             arcade.exit()
+
+    def get_total_stats(self):
+        try:
+            with open("race_history.json", "r") as f:
+                history = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return 0, 0
+
+        total_p1 = sum(item["p1_time"] for item in history)
+        total_p2 = sum(item["p2_time"] for item in history)
+        
+        return total_p1, total_p2
