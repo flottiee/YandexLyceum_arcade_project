@@ -7,7 +7,7 @@ import constants
 
 
 class Car(arcade.Sprite):
-    def __init__(self, track, player_id=1, control_type="arrows"): # Изменено: добавлен player_id
+    def __init__(self, track, player_id=1, control_type=""):
         super().__init__()
         img = "assets/images/car_black_1.png" if control_type == "arrows" else "assets/images/car_black_1.png"
         self.texture = arcade.load_texture(img)
@@ -27,8 +27,8 @@ class Car(arcade.Sprite):
 
         self.angle = 90
 
-        self.is_oversteering = False  # Флаг эффекта масла
-        self.oversteer_timer = 0.0    # Таймер эффекта масла
+        self.is_oversteering = False  
+        self.oversteer_timer = 0.0    
         self.acceleration = 0.2
         self.speed = 0
         self.brake_deceleration = 0.8
@@ -215,29 +215,28 @@ class Car(arcade.Sprite):
         self.input_right = right
 
     def update_car(self, dt):
-        # 1. ЛОГИКА МАСЛА (ТЗ: Таймер и флаг)
+        # 1. ЛОГИКА МАСЛА
         if self.timer_slide > 0:
             self.timer_slide -= dt
             self.is_slides_on_oil = True
         else:
             self.is_slides_on_oil = False
 
-        # 2. ОГРАНИЧЕНИЕ ПОВОРОТА (ТЗ: Зависимость от скорости)
+        # 2. ОГРАНИЧЕНИЕ ПОВОРОТА
         # Рассчитываем множитель от 0.0 до 1.0
         speed_ratio = abs(self.speed) / self.max_forward_speed
         
         if speed_ratio < 0.1:
-            # Слишком медленно или стоим — не поворачиваем вообще
+            # трение высокое, чтобы поворачивать
             turn_mod = 0.0
         elif speed_ratio < 0.5:
-            # Набираем маневренность (от 0.1 до 0.5 скорости)
+            # норм управление
             turn_mod = speed_ratio * 2.0
         else:
             # После 50% скорости руль становится "тяжелым"
             turn_mod = max(0.4, 1.3 - speed_ratio)
 
         # 3. РАСЧЕТ СИЛЫ ПОВОРОТА
-        # Определяем базовое направление: влево (+1), вправо (-1)
         direction = 0
         if self.input_left:
             direction = -1
@@ -251,10 +250,10 @@ class Car(arcade.Sprite):
         turn_amount = direction * self.turn_speed * turn_mod * oil_boost
 
         # ПРИМЕНЕНИЕ ПОВОРОТА
-        # ВНИМАНИЕ: Если руль инвертирован, просто смени += на -= здесь и ВСЁ.
+        # ВНИМАНИЕ: Если руль инвертирован, просто заменить += на -= здесь и ВСЁ.
         self.angle += turn_amount 
 
-        # 4. ФИЗИКА ГАЗА И ТОРМОЗА (Очищенная от старых else)
+        # 4. ФИЗИКА ГАЗА И ТОРМОЗА 
         if self.input_up:
             self.speed += self.acceleration
             if self.speed > self.max_forward_speed:
@@ -270,7 +269,7 @@ class Car(arcade.Sprite):
             elif self.speed < 0:
                 self.speed = min(0, self.speed + self.natural_deceleration)
 
-        # 5. ОБНОВЛЕНИЕ ВЕКТОРОВ (Твои рабочие sin/cos)
+        # 5. ОБНОВЛЕНИЕ ВЕКТОРОВ
         angle_rad = math.radians(self.angle)
         self.change_x = self.speed * math.sin(angle_rad)
         self.change_y = self.speed * math.cos(angle_rad)

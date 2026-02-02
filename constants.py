@@ -30,7 +30,6 @@ ZOOM_LERP = 0.01 # Плавность изменения зума (меньше 
 LEVELS = [
     {
         "map_path": "tmx_files/track1.tmx",
-        # СЮДА НУЖНО ДОБАВИТЬ track_id
         "track_id": 1, 
         "start_x": 1056,
         "start_y": 80,
@@ -41,7 +40,7 @@ LEVELS = [
         "map_path": "tmx_files/track2.tmx",
         "track_id": 2,
         "start_x": 482, "start_y": 883, "start_angle": 90,
-        "finish_dir": (1, 0), # Вектор направления через финиш (направо)
+        "finish_dir": (1, 0), 
         "world_width": 3200,
         "world_height": 1920
     },
@@ -49,7 +48,7 @@ LEVELS = [
         "map_path": "tmx_files/track3.tmx",
         "track_id": 3,
         "start_x": 112, "start_y": 80, "start_angle": 90,
-        "finish_dir": (1, 0), # Вектор направления через финиш (направо)
+        "finish_dir": (1, 0), 
         "world_width": 3200,
         "world_height": 1920
     },

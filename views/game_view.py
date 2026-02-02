@@ -11,11 +11,11 @@ class GameView(arcade.View):
     def __init__(self, level_index):
         super().__init__()
         self.level_index = level_index
-        # Таймеры
+        # таймеры
         self.p1_time = 0.0
         self.p2_time = 0.0
-        self.start_time = 0.0  # ДОБАВЛЕНО: исправление ошибки "start_time неизвестен"
-        self.final_time = 0.0  # ДОБАВЛЕНО: исправление ошибки "final_time неизвестен"
+        self.start_time = 0.0  
+        self.final_time = 0.0  
         self.race_active = True
         self.level_index = level_index
         self.level_data = constants.LEVELS[level_index]
@@ -159,20 +159,20 @@ class GameView(arcade.View):
             self.p2.update_car(dt)
             self.engine2.update()
 
-        # ### ЦИКЛ ОБРАБОТКИ ЛОГИКИ ДЛЯ ОБОИХ ИГРОКОВ
+        # ЦИКЛ ОБРАБОТКИ ЛОГИКИ ДЛЯ ОБОИХ ИГРОКОВ
         for i, car in enumerate(self.car_list):
-            # Масло и препятствия
+            # масло и препятствия
             if arcade.check_for_collision_with_list(car, self.obstacles): car.start_slide()
             if arcade.check_for_collision_with_list(car, self.oil_list): car.hit_oil()
             if arcade.check_for_collision_with_list(car, self.walls): car.on_wall_hit()
 
-            # Чекпоинты
+            # чекпоинты
             if arcade.check_for_collision_with_list(car, self.checkpoints):
                 if i == 0: self.p1_passed_checkpoint = True
                 else: self.p2_passed_checkpoint = True
                 self.unlock_block_walls()
 
-            # Финишная линия (логика пересечения)
+            # финишная линия (логика пересечения)
             on_line = arcade.check_for_collision_with_list(car, self.finish_line)
             last_frame = self.p1_on_line_last_frame if i == 0 else self.p2_on_line_last_frame
             
@@ -190,10 +190,13 @@ class GameView(arcade.View):
         self.update_camera()
 
     def unlock_block_walls(self):
-        if self.block_wall and len(self.block_wall) > 0:
-            for sprite in self.block_wall:
-                if sprite not in self.walls: self.walls.append(sprite)
-            self.block_wall.clear()
+        # Блокировочная стена возникает только если оба пересекли чекпоинт
+        if self.p1_passed_checkpoint and self.p2_passed_checkpoint:
+            if self.block_wall and len(self.block_wall) > 0:
+                for sprite in self.block_wall:
+                    if sprite not in self.walls:
+                        self.walls.append(sprite)
+                self.block_wall.clear()
 
     def handle_finish_line_collision(self, car, player_idx):
         angle_rad = math.radians(car.angle)
@@ -222,7 +225,7 @@ class GameView(arcade.View):
             self.window.show_view(FinishView(self.final_time))
 
     def update_camera(self):
-        # ### ИЗМЕНЕНО: Камера следит за двумя игроками
+        # ИЗМЕНЕНО: Камера следит за двумя игроками
         mid_x = (self.p1.center_x + self.p2.center_x) / 2
         mid_y = (self.p1.center_y + self.p2.center_y) / 2
         
