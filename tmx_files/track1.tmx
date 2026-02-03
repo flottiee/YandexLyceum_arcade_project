@@ -5,17 +5,12 @@
  <tileset firstgid="365" source="../tsx_files/objects_64.tsx"/>
  <layer id="8" name="fon" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztlEEOwCAIBO1H/P8zm94RQWEXTSfxghadCvantX7ZmME+X4TDyIdFlEMFbvH40DxGc1qMVf8ZHgwsHlLcuhaB9a6kuCWGwFNzUnwWG+Vm9s7vcb4HigyPKi6jeSmu5WKQ4cHsgQwPJDfU1Wp/zHIh2XmvtHzWvar0zsq6DLwenn+Nxuuxeq8ILPtL55S+q/LuevrA443uZWZd7BJR7xX8o++ywnuVXcMnOrDGCxxcSEw=
+   eJztlEEOwCAIBNuP+P9nNr31AAgqu2g6iRe06FSw3dfVDhs92Odb4aC5sJhx+H5fgVM8XiwPbc6Kseo/w4OBx0OKe9ci8N6VFPfEEERqTor3YlpuZu/8Hvt7oMjwqOKizUtxKxeDDA9mD2R4IDmhrkb7o5cLycx7ZeXz7lWld0bWZRD1iPxrNFGP0XtF4NlfOqf0XZV3N9IHEW90LzPrYpYV9V7Bf/VdVnivsmt4RwfWeAC8yUhr
   </data>
  </layer>
  <layer id="1" name="race_track" width="50" height="30">
   <data encoding="base64" compression="zlib">
    eJztl0tOAzEMhp3L8FjQLQIWsEW8u0VQUbhBKTfgcQMel+IKhStwATwSljyR42TSOFONsPQt6ngi/05jzwAMxz6QF+Q7wgNy11OOKfaOfCVy+/fMxAGcuLh2K6Sa/nTQMULGyEGHZ6ygmko6npEFY87W9pEt5EKJt4bn86no4Gt+3aWzGEFdC+WqrfG6S2dBvtQ+UYL7DB2SX/LF+sSas7kf08I6yCfdlXnAvywz5MZIh3/OtCb5LexfR9s3FB1PIPcXyW89z3N0vDFfTbR5nqPjFXmE1Z3nqTpqWs4876qjxjuw5TxvbMz8tciZ59RzQvXg710N1u/BufNcQotdpbsT66fTwB78/Pr6HuQ6tH7qn+t5RHPt+dHUcQ97zqaDqE1Y3Bm0e3sNtH5FbLiwHuqv164dt4Osu/7moHYPeJ48/y66S5o2v/x7sBvIU8pfiit5ny+9/bQ56Bv9PyQ9xDGuXSXEpXIa+H2o7J3a2yU9lP+R0+OWzZ/QdPjzPFWPn38obgHl2A7sJ83zIdgvF3scaA==
-  </data>
- </layer>
- <layer id="7" name="obstacles" width="50" height="30">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20IX6AAAAAAAIDXABdwAAE=
   </data>
  </layer>
  <layer id="10" name="oil" width="50" height="30">
@@ -30,7 +25,7 @@
  </layer>
  <layer id="3" name="walls" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJzdllGKwjAQhieXUWRx32VvoCy6vosIe5a+2HehJyh4Km9igg47zKZpks6k1R/+lzRt5uskM2kBoLW+RXpmHm5hej5BvHaExdnHmvJfhpj+z1sCg9P2+c7BfmNjEl8W1gX+WFI59taf8iFli+Y/RT/WS/lwshXiwP13ZeO+XOxB9wxw53Bw+XLhxlLqhLRyOGLHSuodOBoI16shHF37Wat/aHL4ehMd1/A75KNS4Cgp7OevzoHrS3H8CsaVKkmOUvfbrvWlONBj3IGlOfhdrJRyOLq+M+ZZX2fUK59Cc7XPimMowaEt1z9iOPrqaQPjcgCEz8fKMs5Nf14PZN5HmbD/KcSB6uLh9RXnfVkvJlR3uTDOvv4Qm0eNPugcc684m4enJsqBeUHH7I/aPj8+59Uj8nEO7hCPi//bpHFrCTlC4jw0/orNq6A8T0PWjhHyhN7x7U9t0/1zB3d2k3k=
+   eJzdllFuwjAMhp3LMCHE3qfdgAkBfUdo0s6yF/qO1BNU4lTchETUWmTS1Al22vWX/pc0bfzViZ0WAFrrG9ML83AL0/M38LX3WJxDrCn/5RX7//OWwOC069452m98mcSXhXWBP5ZUjsr6XT6kbPn5T9HBei0fTrZiHLj/rmQ8lIsKdM8AdQ4HVSgXbiylTkgrh4M7VlJz4GggXq9e4ejbz1r9Q5Mj1Jv8cQ3PIR+/Chwlhf38v3Pg+lIcP4JxpUqSo9T9tm99KQ70GHdgaQ56FyulHI6+74x11l0/32TUq5Bic7XPimMowaEt1z84HEP1tIFxOQDi5+PDMr6Z4bwevXmrMmE/KcaB6uOh9RXnfVovJ1R3qTDOof7AzaNGH3Tm3CvO5uGpyefAvKA5+6O2z0/dvHpEPspBHeNx8W9NGreWhjhCPH78obmleRomA+Xhzitlf907a9WgHQ==
   </data>
  </layer>
  <layer id="4" name="finish_line" width="50" height="30">

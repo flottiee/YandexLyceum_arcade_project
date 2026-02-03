@@ -9,21 +9,33 @@ import constants
 class Car(arcade.Sprite):
     def __init__(self, track, player_id=1, control_type=""):
         super().__init__()
-        img = "assets/images/car_black_1.png" if control_type == "arrows" else "assets/images/car_black_1.png"
+        img = "assets/images/car_black_1.png" if control_type == "arrows" else "assets/images/car_red_1.png"
         self.texture = arcade.load_texture(img)
         self.control_type = control_type
         self.scale = constants.PLAYER_SCALE
         self.player_id = player_id
 
         if track == 1:
-            self.center_x = constants.PLAYER_START_X_TRACK_1
-            self.center_y = constants.PLAYER_START_Y_TRACK_1
+            if self.player_id == 1:
+                self.center_x = constants.PLAYER1_START_X_TRACK_1
+                self.center_y = constants.PLAYER1_START_Y_TRACK_1
+            elif self.player_id == 2:
+                self.center_x = constants.PLAYER2_START_X_TRACK_1
+                self.center_y = constants.PLAYER2_START_Y_TRACK_1
         elif track == 2:
-            self.center_x = constants.PLAYER_START_X_TRACK_2
-            self.center_y = constants.PLAYER_START_Y_TRACK_2
+            if self.player_id == 1:
+                self.center_x = constants.PLAYER1_START_X_TRACK_2
+                self.center_y = constants.PLAYER1_START_Y_TRACK_2
+            elif self.player_id == 2:
+                self.center_x = constants.PLAYER2_START_X_TRACK_2
+                self.center_y = constants.PLAYER2_START_Y_TRACK_2
         elif track == 3:
-            self.center_x = constants.PLAYER_START_X_TRACK_3
-            self.center_y = constants.PLAYER_START_Y_TRACK_3
+            if self.player_id == 1:
+                self.center_x = constants.PLAYER1_START_X_TRACK_3
+                self.center_y = constants.PLAYER1_START_Y_TRACK_3
+            elif self.player_id == 2:
+                self.center_x = constants.PLAYER2_START_X_TRACK_3
+                self.center_y = constants.PLAYER2_START_Y_TRACK_3
 
         self.angle = 90
 
@@ -50,30 +62,9 @@ class Car(arcade.Sprite):
         self.input_right = False
 
         self.slide_particles = []
-        self.slide_particle_count = 0
-        self.max_slide_particles = 100
-        self.slide_particle_spawn_timer = 0
-        self.slide_particle_spawn_rate = 0.05
-
         self.exhaust_particles = []
-        self.exhaust_particles_count = 0
-        self.exhaust_particles_spawn_timer = 0
-        self.exhaust_particles_spawn_rate = 0.01
 
         self.is_finished = False
-
-    def start_slide(self):
-        self.is_slides_on_oil = True
-        self.timer_after_slide = 2
-        self.timer_slide = 0
-        for _ in range(10):
-            self.spawn_slide_particle()
-
-    def spawn_shooting_particles(self):
-        """Отстрелы от выхлопа"""
-        angle_rad = math.radians(self.angle + 180)
-        offset_x = 15 * math.sin(angle_rad)
-        offset_y = 15 * math.cos(angle_rad)
 
     def spawn_exhaust_particles(self):
         """Выхлопные газы сзади машины"""
@@ -92,13 +83,9 @@ class Car(arcade.Sprite):
             'size': random.uniform(2, 5)
         }
         self.exhaust_particles.append(particle)
-        self.exhaust_particles_count += 1
 
     def spawn_slide_particle(self):
         """Создает одну частицу скольжения"""
-        if len(self.slide_particles) >= self.max_slide_particles:
-            return
-
         angle_offset = random.uniform(0, 2 * math.pi)
         distance = random.uniform(10, 25)
 
@@ -128,7 +115,6 @@ class Car(arcade.Sprite):
         }
 
         self.slide_particles.append(particle)
-        self.slide_particle_count += 1
 
     def update_slide_particles(self, dt):
         """Обновляет частицы скольжения"""
@@ -153,7 +139,6 @@ class Car(arcade.Sprite):
 
         for i in reversed(particles_to_remove):
             self.slide_particles.pop(i)
-            self.slide_particle_count -= 1
 
     def update_exhaust_particles(self, dt):
         particles_to_remove = []
@@ -170,7 +155,6 @@ class Car(arcade.Sprite):
 
         for i in reversed(particles_to_remove):
             self.exhaust_particles.pop(i)
-            self.exhaust_particles_count -= 1
 
     def draw_particles(self):
         """Отрисовывает частицы скольжения"""
@@ -205,7 +189,6 @@ class Car(arcade.Sprite):
                 particle['size'],
                 color_with_alpha
             )
-
 
     def update_input(self, up, down, left, right):
         """Обновляет состояние кнопок"""
@@ -256,6 +239,7 @@ class Car(arcade.Sprite):
         # 4. ФИЗИКА ГАЗА И ТОРМОЗА 
         if self.input_up:
             self.speed += self.acceleration
+            self.spawn_exhaust_particles()
             if self.speed > self.max_forward_speed:
                 self.speed = self.max_forward_speed
         elif self.input_down:
