@@ -10,9 +10,15 @@ from .finish_view import FinishView
 
 
 class GameView(arcade.View):
-    def __init__(self, level_index):
+    def __init__(self, level_index, menu, name_p1, name_p2):
         super().__init__()
+        self.menu = menu
+
         self.level_index = level_index
+
+        self.name_p1 = name_p1
+        self.name_p2 = name_p2
+
         # таймеры
         self.p1_time = 0.0
         self.p2_time = 0.0
@@ -99,6 +105,11 @@ class GameView(arcade.View):
         for obj in self.checkpoints:
             print(f"DEBUG: Обнаружен объект в {obj.center_x}, {obj.center_y}")
 
+
+        self.instructions = arcade.Text(f'<^>V - {self.name_p1}, WASD - {self.name_p2}', 15,
+                                        25, arcade.color.WHITE, 15,
+                                        font_name="Kenney Future", batch=self.batch)
+
     def on_draw(self):
         self.clear()
 
@@ -115,11 +126,11 @@ class GameView(arcade.View):
         self.batch.draw()
 
     def update_hud(self):
-        self.t1 = arcade.Text(f"P1: {self.p1_time:.2f}" if self.p1_started else "P1: ЖДЕТ СТАРТА", 20,
-                              self.window.height - 70, arcade.color.WHITE, 16,
+        self.t1 = arcade.Text(f"{self.name_p1}: {self.p1_time:.2f}" if self.p1_started else f"{self.name_p1}: ЖДЕТ СТАРТА", 20,
+                              self.window.height - 70, arcade.color.RED, 16,
                               font_name="Kenney Future", batch=self.batch)
-        self.t2 = arcade.Text(f"P2: {self.p2_time:.2f}" if self.p2_started else "P2: ЖДЕТ СТАРТА", 20,
-                              self.window.height - 100, arcade.color.RED, 16,
+        self.t2 = arcade.Text(f"{self.name_p2}: {self.p2_time:.2f}" if self.p2_started else f"{self.name_p2}: ЖДЕТ СТАРТА", 20,
+                              self.window.height - 100, arcade.color.GOLD, 16,
                               font_name="Kenney Future", batch=self.batch)
 
         if not self.race_started:
@@ -247,12 +258,8 @@ class GameView(arcade.View):
                 self.p2_wrong_way = True
 
     def next_level(self):
-        next_idx = self.level_index + 1
-        if next_idx < len(constants.LEVELS):
-            new_view = GameView(next_idx)
-            self.window.show_view(new_view)
-        else:
-            self.window.show_view(FinishView(self.final_time))
+        self.finish_view = FinishView(self.p1_time, self.p2_time, self.menu)
+        self.window.show_view(self.finish_view)
 
     def update_camera(self):
         # ИЗМЕНЕНО: Камера следит за двумя игроками

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d1723ac6-66b1-4e5d-8e49-2e9067198de7" name="Changes" comment="I redesigned the turning system, small changes.">
-      <change afterPath="$PROJECT_DIR$/assets/images/car_red_1.png" afterDir="false" />
+    <list default="true" id="d1723ac6-66b1-4e5d-8e49-2e9067198de7" name="Changes" comment="upgrade drawing text and made few changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/entities/Car.py" beforeDir="false" afterPath="$PROJECT_DIR$/entities/Car.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/race_history.json" beforeDir="false" afterPath="$PROJECT_DIR$/race_history.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmx_files/track1.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/tmx_files/track1.tmx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/finish_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/finish_view.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/game_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/game_view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/menu_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/menu_view.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +153,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769798747534</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="upgrade drawing text and made few changes">
+      <option name="closed" value="true" />
+      <created>1770122111550</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1770122111550</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -189,6 +196,7 @@
     <MESSAGE value="add slide car on oil" />
     <MESSAGE value="a few changes" />
     <MESSAGE value="I redesigned the turning system, small changes." />
-    <option name="LAST_COMMIT_MESSAGE" value="I redesigned the turning system, small changes." />
+    <MESSAGE value="upgrade drawing text and made few changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="upgrade drawing text and made few changes" />
   </component>
 </project>
