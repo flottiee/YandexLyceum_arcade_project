@@ -1,31 +1,38 @@
 import json
 import arcade
 from pyglet.graphics import Batch
+from .game_factory import ViewFactory
 
 import constants
 
 
 class FinishView(arcade.View):
-    def __init__(self, p1_time=0.0, p2_time=0.0, menu=None):
+    def __init__(self, level_idx=0, p1_time=0.0, p2_time=0.0, p1_name=None, p2_name=None, menu=None):
         super().__init__()
+
         self.menu = menu
+
+        self.level_idx = level_idx
 
         self.camera = arcade.Camera2D()
         self.p1_time = p1_time
         self.p2_time = p2_time
 
+        self.p1_name = p1_name
+        self.p2_name = p2_name
+
         self.batch = Batch()
         self.finish = arcade.Text("ФИНИШ!", constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT / 2,
                                   arcade.color.BLACK, font_size=50, anchor_x="center", batch=self.batch)
-        self.text_1 = arcade.Text(f"Время игрока 1: {self.p1_time:.2f} сек", constants.SCREEN_WIDTH / 2,
+        self.text_1 = arcade.Text(f"Время {self.p1_name}: {self.p1_time:.2f} сек", constants.SCREEN_WIDTH / 2,
                                   constants.SCREEN_HEIGHT / 2 - 60,
                                   arcade.color.BLACK, font_size=20, anchor_x="center",
                                   batch=self.batch) if self.p1_time > 0 else "Время не записано"
-        self.text_2 = arcade.Text(f"Время игрока 2: {self.p1_time:.2f} сек", constants.SCREEN_WIDTH / 2,
+        self.text_2 = arcade.Text(f"Время {self.p2_name}: {self.p2_time:.2f} сек", constants.SCREEN_WIDTH / 2,
                                   constants.SCREEN_HEIGHT / 2 - 100,
                                   arcade.color.BLACK, font_size=20, anchor_x="center",
                                   batch=self.batch) if self.p2_time > 0 else "Время не записано"
-        self.exit = arcade.Text("Нажмите ESC для выхода в меню.",
+        self.exit = arcade.Text("Нажмите ESC для выхода в следущий уровень.",
                                 constants.SCREEN_WIDTH / 2, constants.SCREEN_HEIGHT / 2 - 160,
                                 arcade.color.BLACK, font_size=20, anchor_x="center", batch=self.batch)
 
@@ -40,7 +47,17 @@ class FinishView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
-            self.window.show_view(self.menu)
+            self.level_idx += 1
+            if self.level_idx < len(constants.LEVELS):
+                new_game_view = ViewFactory.create_game_view(
+                    self.level_idx,
+                    self.p1_name,
+                    self.p2_name,
+                    self.menu
+                )
+                self.window.show_view(new_game_view)
+            else:
+                self.window.show_view(self.menu)
 
     def get_total_stats(self):
         try:

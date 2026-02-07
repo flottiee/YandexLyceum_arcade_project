@@ -6,28 +6,27 @@ from pyglet.graphics import Batch
 import constants
 import math
 from entities.Car import Car
-from .finish_view import FinishView
+from .game_factory import ViewFactory
 
 
 class GameView(arcade.View):
-    def __init__(self, level_index, menu, name_p1, name_p2):
+    def __init__(self, level_index, name_p1, name_p2, menu):
         super().__init__()
+        arcade.set_background_color(arcade.color.BLUEBERRY)
+        self.name_p1 = name_p1
+        self.name_p2 = name_p2
         self.menu = menu
 
         self.level_index = level_index
 
-        self.name_p1 = name_p1
-        self.name_p2 = name_p2
-
-        # таймеры
         self.p1_time = 0.0
         self.p2_time = 0.0
         self.start_time = 0.0
         self.final_time = 0.0
         self.race_active = False
         self.time_before_start = 3
-        self.level_index = level_index
-        self.level_data = constants.LEVELS[level_index]
+
+        self.level_data = constants.LEVELS[self.level_index]
 
         self.world_camera = arcade.Camera2D()
         self.gui_camera = arcade.Camera2D()
@@ -44,7 +43,6 @@ class GameView(arcade.View):
         self.p2_on_line_last_frame = False
         self.p1_wrong_way = False
         self.p2_wrong_way = False
-
         self.setup()
 
     def setup(self):
@@ -258,8 +256,15 @@ class GameView(arcade.View):
                 self.p2_wrong_way = True
 
     def next_level(self):
-        self.finish_view = FinishView(self.p1_time, self.p2_time, self.menu)
-        self.window.show_view(self.finish_view)
+        finish_view = ViewFactory.create_finish_view(
+            self.level_index,
+            self.p1_time,
+            self.p2_time,
+            self.name_p1,
+            self.name_p2,
+            self.menu
+        )
+        self.window.show_view(finish_view)
 
     def update_camera(self):
         # ИЗМЕНЕНО: Камера следит за двумя игроками
