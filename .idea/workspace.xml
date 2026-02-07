@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d1723ac6-66b1-4e5d-8e49-2e9067198de7" name="Changes" comment="upgrade drawing text and made few changes">
+    <list default="true" id="d1723ac6-66b1-4e5d-8e49-2e9067198de7" name="Changes" comment="upgrade menuview, finishview and constants.py min and max value of camera">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/race_history.json" beforeDir="false" afterPath="$PROJECT_DIR$/race_history.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/finish_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/finish_view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sounds" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/views/game_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/game_view.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/menu_view.py" beforeDir="false" afterPath="$PROJECT_DIR$/views/menu_view.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +160,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770122111550</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="upgrade menuview, finishview and constants.py min and max value of camera">
+      <option name="closed" value="true" />
+      <created>1770315376838</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1770315376838</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -197,6 +204,7 @@
     <MESSAGE value="a few changes" />
     <MESSAGE value="I redesigned the turning system, small changes." />
     <MESSAGE value="upgrade drawing text and made few changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="upgrade drawing text and made few changes" />
+    <MESSAGE value="upgrade menuview, finishview and constants.py min and max value of camera" />
+    <option name="LAST_COMMIT_MESSAGE" value="upgrade menuview, finishview and constants.py min and max value of camera" />
   </component>
 </project>

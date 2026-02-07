@@ -55,7 +55,7 @@ class GameView(arcade.View):
         self.car_list.append(self.p1)
         self.car_list.append(self.p2)
 
-        self.lap_complete = arcade.load_sound('sounds/lap_complete.mp3')
+        self.lap_complete = arcade.load_sound('assets/sounds/lap_complete.mp3')
         self.map = arcade.load_tilemap(self.level_data["map_path"], 0.5)
 
         self.race_track = self.map.sprite_lists.get('race_track', arcade.SpriteList())
