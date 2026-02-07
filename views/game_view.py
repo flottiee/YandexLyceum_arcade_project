@@ -10,7 +10,7 @@ from .finish_view import FinishView
 
 
 class GameView(arcade.View):
-    def __init__(self, level_index, menu, name_p1, name_p2):
+    def __init__(self, level_index, menu, name_p1, name_p2, results_history=None):
         super().__init__()
         self.menu = menu
 
@@ -19,7 +19,6 @@ class GameView(arcade.View):
         self.name_p1 = name_p1
         self.name_p2 = name_p2
 
-        # таймеры
         self.p1_time = 0.0
         self.p2_time = 0.0
         self.start_time = 0.0
@@ -45,6 +44,7 @@ class GameView(arcade.View):
         self.p1_wrong_way = False
         self.p2_wrong_way = False
 
+        self.results_history = results_history if results_history is not None else []
         self.setup()
 
     def setup(self):
@@ -88,6 +88,18 @@ class GameView(arcade.View):
             scaling=0.5,
             layer_options=layer_options
         )
+
+        try:
+            background_sprite = self.fon[0]
+            texture = background_sprite.texture
+            
+            image = texture.image
+            pixel_color = image.getpixel((0, 0)) 
+            
+            arcade.set_background_color(pixel_color)
+        except Exception as e:
+            print(f"Не удалось считать цвет пикселя: {e}")
+            arcade.set_background_color(arcade.color.SKY_BLUE)
 
         self.passed_checkpoint = False
         self.race_started = False
@@ -183,15 +195,12 @@ class GameView(arcade.View):
             if self.p1_started and self.p2_started:
                 self.race_started = True
 
-            # ЦИКЛ ОБРАБОТКИ ЛОГИКИ ДЛЯ ОБОИХ ИГРОКОВ
             for i, car in enumerate(self.car_list):
-                # масло и препятствия
                 if arcade.check_for_collision_with_list(car, self.oil_list): car.hit_oil()
                 if i == 0:
                     if arcade.check_for_collision_with_list(car, self.walls_car1): car.on_wall_hit()
                 elif i == 1:
                     if arcade.check_for_collision_with_list(car, self.walls_car1): car.on_wall_hit()
-                # чекпоинты
                 if arcade.check_for_collision_with_list(car, self.checkpoints):
                     if i == 0:
                         self.p1_passed_checkpoint = True
@@ -199,7 +208,6 @@ class GameView(arcade.View):
                         self.p2_passed_checkpoint = True
                     self.unlock_block_walls()
 
-                # финишная линия (логика пересечения)
                 on_line = arcade.check_for_collision_with_list(car, self.finish_line)
                 last_frame = self.p1_on_line_last_frame if i == 0 else self.p2_on_line_last_frame
 
@@ -211,7 +219,6 @@ class GameView(arcade.View):
                 else:
                     self.p2_on_line_last_frame = bool(on_line)
 
-            # Проверка завершения уровня
             if self.p1.is_finished and self.p2.is_finished:
                 self.save_results()
                 self.next_level()
@@ -220,7 +227,6 @@ class GameView(arcade.View):
         self.update_hud()
 
     def unlock_block_walls(self):
-        # Блокировочная стена возникает только если оба пересекли чекпоинт
         if self.p1_passed_checkpoint:
             if self.block_wall and len(self.block_wall) > 0:
                 for sprite in self.block_wall:
@@ -258,17 +264,31 @@ class GameView(arcade.View):
                 self.p2_wrong_way = True
 
     def next_level(self):
-        self.finish_view = FinishView(self.p1_time, self.p2_time, self.menu)
+        current_result = {
+            "level": self.level_index + 1,
+            "p1_time": self.p1_time,
+            "p2_time": self.p2_time
+        }
+        self.results_history.append(current_result)
+
+        is_final = (self.level_index >= len(constants.LEVELS) - 1)
+        
+        self.finish_view = FinishView(
+            results_history=self.results_history, 
+            menu=self.menu, 
+            p1_name=self.name_p1, 
+            p2_name=self.name_p2,
+            is_final=is_final,
+            current_level_idx=self.level_index
+        )
         self.window.show_view(self.finish_view)
 
     def update_camera(self):
-        # ИЗМЕНЕНО: Камера следит за двумя игроками
         mid_x = (self.p1.center_x + self.p2.center_x) / 2
         mid_y = (self.p1.center_y + self.p2.center_y) / 2
 
         dist = math.sqrt((self.p1.center_x - self.p2.center_x) ** 2 + (self.p1.center_y - self.p2.center_y) ** 2)
 
-        # Динамический зум под двоих
         target_zoom = max(constants.MIN_ZOOM, min(constants.MAX_ZOOM, 1000 / (dist + 500)))
         self.world_camera.zoom = arcade.math.lerp(self.world_camera.zoom, target_zoom, constants.ZOOM_LERP)
 
