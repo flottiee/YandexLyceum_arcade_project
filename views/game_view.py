@@ -1,5 +1,3 @@
-import os
-import random
 import datetime
 import json
 import arcade
@@ -38,14 +36,6 @@ class GameView(arcade.View):
         
         self.setup()
 
-        # Настройки музыки
-        self.music_list = []
-        self.current_song_index = 0
-        self.music_player = None # Ссылка на текущий играющий поток
-        
-        self.setup_music()
-        self.play_next_song()
-
     def setup(self):
         self.p1 = Car(self.level_data["track_id"], control_type="arrows")
         self.p2 = Car(self.level_data["track_id"], control_type="wasd")
@@ -55,7 +45,20 @@ class GameView(arcade.View):
         self.car_list.append(self.p2)
 
         self.lap_complete = arcade.load_sound('sounds/lap_complete.mp3')
-        self.map = arcade.load_tilemap(self.level_data["map_path"], 0.5)
+        layer_options = {
+            "checkpoints": {
+                "use_spatial_hash": True,
+            },
+            "finish_line": {
+                "use_spatial_hash": True,
+            }
+        }
+
+        self.map = arcade.load_tilemap(
+            self.level_data["map_path"], 
+            scaling=0.5, 
+            layer_options=layer_options
+        )
         
         self.race_track = self.map.sprite_lists.get('race_track', arcade.SpriteList())
         self.objects = self.map.sprite_lists.get('objects', arcade.SpriteList())
@@ -72,20 +75,7 @@ class GameView(arcade.View):
         self.engine1 = arcade.PhysicsEngineSimple(self.p1, self.walls)
         self.engine2 = arcade.PhysicsEngineSimple(self.p2, self.walls)
 
-        layer_options = {
-            "checkpoints": {
-                "use_spatial_hash": True,
-            },
-            "finish_line": {
-                "use_spatial_hash": True,
-            }
-        }
-
-        self.map = arcade.load_tilemap(
-            self.level_data["map_path"], 
-            scaling=0.5, 
-            layer_options=layer_options
-        )
+        
 
         self.passed_checkpoint = False 
         self.race_started = False
@@ -199,11 +189,6 @@ class GameView(arcade.View):
 
         self.update_camera()
 
-        # ПРОВЕРКА: Если музыка закончилась, включаем следующую
-        # У arcade/pyglet плеера есть свойство .playing
-        if self.music_player and not self.music_player.playing:
-            self.play_next_song()
-
     def unlock_block_walls(self):
         # Блокировочная стена возникает только если оба пересекли чекпоинт
         if self.p1_passed_checkpoint and self.p2_passed_checkpoint:
@@ -240,21 +225,34 @@ class GameView(arcade.View):
             self.window.show_view(FinishView(self.final_time))
 
     def update_camera(self):
-        # ИЗМЕНЕНО: Камера следит за двумя игроками
+        # 1. Центр между игроками
         mid_x = (self.p1.center_x + self.p2.center_x) / 2
         mid_y = (self.p1.center_y + self.p2.center_y) / 2
         
-        dist = math.sqrt((self.p1.center_x - self.p2.center_x)**2 + (self.p1.center_y - self.p2.center_y)**2)
+        # 2. Расстояние по осям с запасом (чтобы не были у самых краев)
+        dist_x = abs(self.p1.center_x - self.p2.center_x) + 300 
+        dist_y = abs(self.p1.center_y - self.p2.center_y) + 300
         
-        # Динамический зум под двоих
-        target_zoom = max(constants.MIN_ZOOM, min(constants.MAX_ZOOM, 1000 / (dist + 500)))
+        # 3. Рассчитываем необходимый зум для каждой оси
+        # Зум = Размер экрана / Расстояние между игроками
+        zoom_x = self.window.width / dist_x
+        zoom_y = self.window.height / dist_y
+        
+        # Берем минимальный из них (чтобы оба влезли и по ширине, и по высоте)
+        target_zoom = min(zoom_x, zoom_y)
+        
+        # 4. Ограничиваем зум нашими константами
+        target_zoom = max(constants.MIN_ZOOM, min(constants.MAX_ZOOM, target_zoom))
+        
+        # 5. Применяем плавное изменение (LERP)
         self.world_camera.zoom = arcade.math.lerp(self.world_camera.zoom, target_zoom, constants.ZOOM_LERP)
         
+        # 6. Двигаем позицию камеры
         cam_x, cam_y = self.world_camera.position
         self.world_camera.position = (
             arcade.math.lerp(cam_x, mid_x, constants.CAMERA_LERP),
             arcade.math.lerp(cam_y, mid_y, constants.CAMERA_LERP)
-        )
+    )
 
     def on_key_press(self, key, modifiers):
         self.pressed_keys.add(key)
@@ -281,40 +279,3 @@ class GameView(arcade.View):
         
         with open("race_history.json", "w", encoding="utf-8") as f:
             json.dump(history, f, indent=4, ensure_ascii=False)
-
-    def setup_music(self):
-        """Автоматически находит все треки в подпапке"""
-        music_path = "sounds/soundtracks"
-        
-        # Проверяем, существует ли папка, чтобы игра не вылетела
-        if os.path.exists(music_path):
-            # Собираем все файлы .mp3, .wav, .ogg
-            self.music_list = [
-                os.path.join(music_path, f) 
-                for f in os.listdir(music_path) 
-                if f.lower().endswith(('.mp3', '.wav', '.ogg'))
-            ]
-            # Перемешиваем список для рандома
-            random.shuffle(self.music_list)
-    
-    def play_next_song(self):
-        """Загружает и включает следующий трек"""
-        if not self.music_list:
-            return
-
-        # Останавливаем предыдущую песню, если она есть
-        if self.music_player:
-            self.music_player.pause()
-
-        # Берем путь к файлу
-        song_path = self.music_list[self.current_song_index]
-        
-        # Загружаем и запускаем
-        song = arcade.load_sound(song_path)
-        # volume=0.35 — это твои 35% громкости
-        self.music_player = song.play(volume=0.35)
-        
-        # Готовим индекс для следующего трека (зацикливаем список)
-        self.current_song_index = (self.current_song_index + 1) % len(self.music_list)
-
-    
