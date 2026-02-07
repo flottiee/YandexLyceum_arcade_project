@@ -1,3 +1,5 @@
+import os
+import random
 import datetime
 import json
 import arcade
@@ -35,6 +37,14 @@ class GameView(arcade.View):
         self.p2_wrong_way = False
         
         self.setup()
+
+        # Настройки музыки
+        self.music_list = []
+        self.current_song_index = 0
+        self.music_player = None # Ссылка на текущий играющий поток
+        
+        self.setup_music()
+        self.play_next_song()
 
     def setup(self):
         self.p1 = Car(self.level_data["track_id"], control_type="arrows")
@@ -189,6 +199,11 @@ class GameView(arcade.View):
 
         self.update_camera()
 
+        # ПРОВЕРКА: Если музыка закончилась, включаем следующую
+        # У arcade/pyglet плеера есть свойство .playing
+        if self.music_player and not self.music_player.playing:
+            self.play_next_song()
+
     def unlock_block_walls(self):
         # Блокировочная стена возникает только если оба пересекли чекпоинт
         if self.p1_passed_checkpoint and self.p2_passed_checkpoint:
@@ -266,3 +281,40 @@ class GameView(arcade.View):
         
         with open("race_history.json", "w", encoding="utf-8") as f:
             json.dump(history, f, indent=4, ensure_ascii=False)
+
+    def setup_music(self):
+        """Автоматически находит все треки в подпапке"""
+        music_path = "sounds/soundtracks"
+        
+        # Проверяем, существует ли папка, чтобы игра не вылетела
+        if os.path.exists(music_path):
+            # Собираем все файлы .mp3, .wav, .ogg
+            self.music_list = [
+                os.path.join(music_path, f) 
+                for f in os.listdir(music_path) 
+                if f.lower().endswith(('.mp3', '.wav', '.ogg'))
+            ]
+            # Перемешиваем список для рандома
+            random.shuffle(self.music_list)
+    
+    def play_next_song(self):
+        """Загружает и включает следующий трек"""
+        if not self.music_list:
+            return
+
+        # Останавливаем предыдущую песню, если она есть
+        if self.music_player:
+            self.music_player.pause()
+
+        # Берем путь к файлу
+        song_path = self.music_list[self.current_song_index]
+        
+        # Загружаем и запускаем
+        song = arcade.load_sound(song_path)
+        # volume=0.35 — это твои 35% громкости
+        self.music_player = song.play(volume=0.35)
+        
+        # Готовим индекс для следующего трека (зацикливаем список)
+        self.current_song_index = (self.current_song_index + 1) % len(self.music_list)
+
+    
