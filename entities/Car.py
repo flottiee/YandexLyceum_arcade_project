@@ -198,45 +198,32 @@ class Car(arcade.Sprite):
         self.input_right = right
 
     def update_car(self, dt):
-        # 1. ЛОГИКА МАСЛА
         if self.timer_slide > 0:
             self.timer_slide -= dt
             self.is_slides_on_oil = True
         else:
             self.is_slides_on_oil = False
 
-        # 2. ОГРАНИЧЕНИЕ ПОВОРОТА
-        # Рассчитываем множитель от 0.0 до 1.0
         speed_ratio = abs(self.speed) / self.max_forward_speed
         
         if speed_ratio < 0.1:
-            # трение высокое, чтобы поворачивать
             turn_mod = 0.0
         elif speed_ratio < 0.5:
-            # норм управление
             turn_mod = speed_ratio * 2.0
         else:
-            # После 50% скорости руль становится "тяжелым"
             turn_mod = max(0.4, 1.3 - speed_ratio)
 
-        # 3. РАСЧЕТ СИЛЫ ПОВОРОТА
         direction = 0
         if self.input_left:
             direction = -1
         elif self.input_right:
             direction = 1
 
-        # Множитель масла (только если нажат поворот!)
         oil_boost = 4.0 if self.is_slides_on_oil else 1.0
         
-        # Итоговое количество градусов, на которое повернем
         turn_amount = direction * self.turn_speed * turn_mod * oil_boost
-
-        # ПРИМЕНЕНИЕ ПОВОРОТА
-        # ВНИМАНИЕ: Если руль инвертирован, просто заменить += на -= здесь и ВСЁ.
         self.angle += turn_amount 
 
-        # 4. ФИЗИКА ГАЗА И ТОРМОЗА 
         if self.input_up:
             self.speed += self.acceleration
             self.spawn_exhaust_particles()
@@ -247,18 +234,15 @@ class Car(arcade.Sprite):
             if self.speed < self.max_reverse_speed:
                 self.speed = self.max_reverse_speed
         else:
-            # Трение (естественная остановка)
             if self.speed > 0:
                 self.speed = max(0, self.speed - self.natural_deceleration)
             elif self.speed < 0:
                 self.speed = min(0, self.speed + self.natural_deceleration)
 
-        # 5. ОБНОВЛЕНИЕ ВЕКТОРОВ
         angle_rad = math.radians(self.angle)
         self.change_x = self.speed * math.sin(angle_rad)
         self.change_y = self.speed * math.cos(angle_rad)
 
-        # Частицы и визуализация
         self.update_exhaust_particles(dt)
         if self.is_slides_on_oil:
             self.spawn_slide_particle()
@@ -274,11 +258,10 @@ class Car(arcade.Sprite):
         Вместо умножения на 0.5, вычитаем фиксированное значение.
         Это создаст эффект сильного сопротивления (трения) о борт.
         """
-        penalty = 0.15 # Сила торможения об стену
+        penalty = 0.25 # Сила торможения об стену
         if self.speed > 0:
             self.speed = max(0, self.speed - penalty)
         elif self.speed < 0:
             self.speed = min(0, self.speed + penalty)
         
-        # Дополнительно можно еще немного гасить скорость множителем
         self.speed *= 0.95

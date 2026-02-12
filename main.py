@@ -5,7 +5,6 @@ import sys
 import os
 import random
 
-# Настройка путей
 PROJECT_ROOT = Path(__file__).parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -16,12 +15,10 @@ class MyGame(arcade.Window):
     def __init__(self):
         super().__init__(constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT, constants.SCREEN_TITLE)
         
-        # Музыкальные переменные
         self.music_list = []
         self.current_song_index = 0
         self.music_player = None
         
-        # Инициализируем музыку
         self.setup_music()
         self.play_next_song()
 
@@ -29,7 +26,6 @@ class MyGame(arcade.Window):
         """Ищет музыку в подпапке soundtracks"""
         music_path = PROJECT_ROOT / "assets" / "sounds" / "soundtracks"
         if music_path.exists():
-            # Собираем пути ко всем аудиофайлам
             self.music_list = [
                 str(f) for f in music_path.iterdir() 
                 if f.suffix.lower() in ('.mp3', '.wav', '.ogg')
