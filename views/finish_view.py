@@ -1,5 +1,6 @@
 import arcade
 from pyglet.graphics import Batch
+from .game_factory import ViewFactory
 
 import constants
 

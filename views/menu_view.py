@@ -83,7 +83,7 @@ class MenuView(arcade.View):
         print(f"Игрок 2: {self.player2_name}")
 
     def on_show_view(self):
-        arcade.set_background_color(arcade.color.DARK_SLATE_BLUE)
+        arcade.set_background_color(arcade.color.BLUEBERRY)
 
     def on_draw(self):
         self.clear()
